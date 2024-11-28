@@ -4,12 +4,14 @@ import EmployeesForm from "./forms/EmployeesForm";
 import AdminForm from "./forms/AdminForm";
 
 function LoginForm() {
+  //color of the buttons to change the login form
   const [adminButtonColor, setAdminButtonColor] = useState("text-bg-dark");
   const [employeeButtonColor, setEmployeeButtonColor] =
     useState("text-bg-light");
-
+  //Form to render
   const [renderForm, setRenderForm] = useState("AdminForm");
 
+ //Change button color and render the selected form
   const selectButton = (e) => {
     if (e.target.value === "employee") {
       setAdminButtonColor("text-bg-light");
@@ -35,7 +37,7 @@ function LoginForm() {
                   type="button"
                   value="admin"
                   className={`flex-fill h-100  ${adminButtonColor} rounded-0 border-black`}
-                  style={{ minWidth: "150px" }} // Ajusta este tamaño mínimo según sea necesario
+                  style={{ minWidth: "150px" }}
                   onClick={(e) => selectButton(e)}
                 >
                   ADMINISTRADOR
@@ -45,7 +47,7 @@ function LoginForm() {
                   type="button"
                   value="employee"
                   className={`flex-fill h-100 rounded-0 ${employeeButtonColor} border-black`}
-                  style={{ minWidth: "150px" }} // Ajusta este tamaño mínimo según sea necesario
+                  style={{ minWidth: "150px" }}
                   onClick={(e) => selectButton(e)}
                 >
                   EMPLEADO
