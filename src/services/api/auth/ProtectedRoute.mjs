@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = () => {
   const [loading, setLoading] = useState(true); //To handle the load while validating the token
@@ -10,42 +10,40 @@ const ProtectedRoute = () => {
   const location = useLocation(); //Get the current route
 
   useEffect(() => {
-
-    let tokenKey = ''; //variable to store the token
+    let tokenKey = ""; //variable to store the token
 
     //verify which route the client is trying to access to determine which access token it should verify
-    if (location.pathname.startsWith('/EmployeePortal')) {
-      tokenKey = 'EmployeeToken';
-    } else if (location.pathname.startsWith('/AdminPortal')) {
-      tokenKey = 'AdminToken';
+    if (location.pathname.startsWith("/EmployeePortal")) {
+      tokenKey = "EmployeeToken";
+    } else if (location.pathname.startsWith("/AdminPortal")) {
+      tokenKey = "AdminToken";
     }
 
     //Get the token saved in the cookies
     const token = localStorage.getItem(tokenKey);
 
-
     if (!token) {
-     //If there is no token, redirect to login
-      navigate('/login');
+      //If there is no token, redirect to login
+      navigate("/login");
       setLoading(false);
       return;
     }
 
     //Verify the token by sending it in the header
     axios
-      .get('http://localhost:3080/auth/protected', {
+      .get("http://localhost:3080/auth/protected", {
         headers: {
-          Authorization: `Bearer ${token}`,//Send the token in the header
+          Authorization: `Bearer ${token}`, //Send the token in the header
         },
       })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) {
           setIsValidToken(true); //If the token is valid
         }
       })
       .catch(() => {
-        localStorage.removeItem('authToken'); //If the token is invalid, remove the token
-        navigate('/login'); //Redirect to login if token is invalid
+        localStorage.removeItem(tokenKey); //If the token is invalid, remove the token
+        navigate("/login"); //Redirect to login if token is invalid
       })
       .finally(() => {
         setLoading(false); //Stop loading when verification is finished
