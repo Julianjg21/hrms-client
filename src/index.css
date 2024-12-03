@@ -10,3 +10,5 @@ body {
 }
 
 
+/*hide automatic dropdown icon*/
+.custom-dropdown-toggle::after { display: none !important; }
