@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import CreateUser from "./sections/CreateUser";
+import CreateUser from "./userManagementSections/CreateUser";
 function MainUserManagement() {
   return (
     <div className="container w-100">

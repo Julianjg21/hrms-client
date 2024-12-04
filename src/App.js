@@ -1,6 +1,6 @@
 import React from "react";
 import LoginPage from "./pages/login/LoginPage";
-import AdminPortalPage from "./pages/home/adminHome/AdminPortalPage";
+import  AdminPortalPage from "./pages/home/adminHome/AdminPortalPage"
 import "./App.css";
 import ProtectedRoute from "./services/api/auth/ProtectedRoute.mjs";
 import EmployeePortalPage from "./pages/home/employeeHome/EmployeePortalPage";
