@@ -1,28 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button, CardTitle } from "react-bootstrap";
-import EmployeesForm from "./forms/EmployeesForm";
-import AdminForm from "./forms/AdminForm";
-
+import { Outlet, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function LoginForm() {
   //color of the buttons to change the login form
   const [adminButtonColor, setAdminButtonColor] = useState("text-bg-dark");
   const [employeeButtonColor, setEmployeeButtonColor] =
     useState("text-bg-light");
-  //Form to render
-  const [renderForm, setRenderForm] = useState("AdminForm");
 
- //Change button color and render the selected form
-  const selectButton = (e) => {
-    if (e.target.value === "employee") {
-      setAdminButtonColor("text-bg-light");
-      setEmployeeButtonColor("text-bg-dark");
-      setRenderForm("EmployeesForm");
+  const navigate = useNavigate(); // useNavigate hook
+  const location = useLocation(); // useLocation hook
+
+  useEffect(() => {
+    const actualLocation = location.pathname; //Get the current route
+    //check the current route
+    if (actualLocation.includes("/employees")) {
+      setAdminButtonColor("text-bg-light"); //set color to the admin form  button
+      setEmployeeButtonColor("text-bg-dark"); // set color to the employee form button
     } else {
-      setAdminButtonColor("text-bg-dark ");
-      setEmployeeButtonColor("text-bg-light");
-      setRenderForm("AdminForm");
+      setAdminButtonColor("text-bg-dark"); //set color to the admin form  button
+      setEmployeeButtonColor("text-bg-light"); // set color to the employee form button
     }
-  };
+  }, [location]); //react to changes
 
   return (
     <div className="container-fluid bg-black h-100">
@@ -38,7 +37,7 @@ function LoginForm() {
                   value="admin"
                   className={`flex-fill h-100  ${adminButtonColor} rounded-0 border-black`}
                   style={{ minWidth: "150px" }}
-                  onClick={(e) => selectButton(e)}
+                  onClick={() => navigate("admins")}
                 >
                   ADMINISTRADOR
                 </Button>
@@ -48,7 +47,7 @@ function LoginForm() {
                   value="employee"
                   className={`flex-fill h-100 rounded-0 ${employeeButtonColor} border-black`}
                   style={{ minWidth: "150px" }}
-                  onClick={(e) => selectButton(e)}
+                  onClick={() => navigate("employees")}
                 >
                   EMPLEADO
                 </Button>
@@ -56,7 +55,7 @@ function LoginForm() {
               <CardTitle className="text-center mt-5 mb-2">
                 Iniciar Sesión
               </CardTitle>
-              {renderForm === "AdminForm" ? <AdminForm /> : <EmployeesForm />}
+              <Outlet />
             </Card.Body>
           </Card>
         </div>
