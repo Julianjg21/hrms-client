@@ -17,8 +17,6 @@ function EmployeesForm() {
   const closeFindEmailModal = () => setShowFindEmailModal(false); // close the modal FindEmailModal
   const handleFindEmailModal = () => setShowFindEmailModal(true); // show modal FindEmailModal
 
-
-
   const handleLogin = async (event) => {
     event.preventDefault(); //Prevent page reload
     const typeUser = "employee"; //user type
@@ -29,9 +27,11 @@ function EmployeesForm() {
         password,
         typeUser,
       });
-
       //Save the token in localStorage
       localStorage.setItem("EmployeeToken", response.data.token);
+      localStorage.setItem("EmployeePermissions", response.data.permissions);
+      localStorage.setItem("EmployeeUserId", response.data.userId);
+
       //navigate to the Employee Portal route
       navigate("/EmployeePortal");
     } catch (error) {
