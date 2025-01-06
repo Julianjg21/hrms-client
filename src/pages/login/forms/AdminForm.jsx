@@ -16,15 +16,18 @@ function AdminForm() {
     const typeUser = "administrator"; //type of user to enter
     //send data
     try {
-      //
+      //Send the data to the server
       const response = await axios.post("http://localhost:3080/auth/login", {
         email,
         password,
         typeUser,
       });
-
       //Save the token in localStorage
       localStorage.setItem("AdminToken", response.data.token);
+      localStorage.setItem("AdminPermissions", JSON.stringify(response.data.permissions));
+      localStorage.setItem("AdminUserId", response.data.userId);
+
+
       //Navigate to the AdminPortal path
       navigate("/AdminPortal");
     } catch (error) {
@@ -38,7 +41,6 @@ function AdminForm() {
 
   return (
     <div>
-      {" "}
       <Form className="p-3" onSubmit={handleLogin}>
         <Form.Group className="mb-3" controlId="adminEmail">
           <Form.Label className="float-start">Correo</Form.Label>
