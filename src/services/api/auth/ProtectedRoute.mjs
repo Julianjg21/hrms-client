@@ -11,12 +11,17 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     let tokenKey = ""; //variable to store the token
-
+    let userPermissions = []; //variable to store the user's role permissions
+    let userId = "";
     //verify which route the client is trying to access to determine which access token it should verify
     if (location.pathname.startsWith("/EmployeePortal")) {
       tokenKey = "EmployeeToken";
+      userPermissions = "EmployeePermissions";
+      userId = "EmployeeUserId";
     } else if (location.pathname.startsWith("/AdminPortal")) {
       tokenKey = "AdminToken";
+      userPermissions = "AdminPermissions";
+      userId = "AdminUserId";
     }
 
     //Get the token saved in the cookies
@@ -43,6 +48,10 @@ const ProtectedRoute = () => {
       })
       .catch(() => {
         localStorage.removeItem(tokenKey); //If the token is invalid, remove the token
+        localStorage.removeItem(userPermissions);
+        localStorage.removeItem(userId);
+        localStorage.removeItem("AllPermissions");
+
         navigate("/login"); //Redirect to login if token is invalid
       })
       .finally(() => {
