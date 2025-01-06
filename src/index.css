@@ -12,3 +12,28 @@ body {
 .custom-dropdown-toggle::after {
   display: none !important;
 }
+
+/* LockWrapper.css */
+.lock-wrapper {
+  position: relative;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Evita que interfiera con el contenido */
+  border-radius: inherit; /* Se adapta al elemento hijo si tiene bordes redondeados */
+}
+
+.lock-icon {
+  font-size: 1.5rem; /* Tamaño del icono */
+  color: gray;
+}
