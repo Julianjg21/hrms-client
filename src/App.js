@@ -54,6 +54,8 @@ function App() {
             <Route path="userManagement" element={<MainUserManagement />}>
               <Route index element={<Navigate to="createUser" />} />
               <Route path="createUser" element={<CreateUser />} />
+              <Route path="searchUsers" element={<SearchUsers />} />
+              <Route path="editUser" element={<EditUser />} />
             </Route>
           </Route>
           {/* Employee portal route, only accessible for employees */}
