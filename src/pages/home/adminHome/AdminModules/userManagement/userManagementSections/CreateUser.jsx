@@ -48,7 +48,6 @@ function CreateUser() {
       "edit_employee_role",
       "edit_bank_name",
       "edit_account_number",
-      "delete_user",
       "create_user",
     ]);
     setRequiredPermissions(getPermissions);
@@ -81,7 +80,7 @@ function CreateUser() {
       birth_date: birthDate, //Pass it as a string in YYYY-MM-DD format
       bank,
       account_number: accountNumber,
-      employeeType,
+      employee_type:employeeType,
     };
 
     try {
