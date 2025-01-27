@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import axios from "axios";
+import { getPermissions } from "./services/api/app/AppApis.mjs";
 import AdminForm from "./pages/login/forms/AdminForm";
 import EmployeesForm from "./pages/login/forms/EmployeesForm";
 import LoginPage from "./pages/login/LoginPage";
@@ -15,15 +15,14 @@ import {
 } from "react-router-dom";
 import CreateUser from "./pages/home/adminHome/AdminModules/userManagement/userManagementSections/CreateUser";
 import MainUserManagement from "./pages/home/adminHome/AdminModules/userManagement/MainUserManagement";
-
+import EditUser from "./pages/home/adminHome/AdminModules/userManagement/userManagementSections/EditeUser";
+import SearchUsers from "./components/users/SearchUsers";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
     const getAllPermissions = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3080/requestUserRole/getAllPermissions"
-        );
+        const response = await getPermissions();
         //store all permissions in local storage
         localStorage.setItem("AllPermissions", JSON.stringify(response.data));
       } catch (error) {
