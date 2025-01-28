@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { findEmail } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
 import { Modal, Button, Form } from "react-bootstrap";
 import VerifyCodeModal from "./VerifyCodeModal";
 import AlertModal from "../AlertModal";
@@ -8,33 +8,32 @@ import Spinner from "react-bootstrap/Spinner";
 function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
   //form states
   const [email, setEmail] = useState("");
+
   //send user email between modals
   const [sendEmail, setSendEmail] = useState("");
+
   //show or close next modal
   const [showVerifyCodeModal, setShowVerifyCodeModal] = useState(false); // show modal state
   const closeShowVerifyCodeModal = () => setShowVerifyCodeModal(false); //close modal function
   const handleShowVerifyCodeModal = () => setShowVerifyCodeModal(true); //show modal function
+
   // Alert states
   const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
   const [bodyText, setBodyText] = useState("");
   //show load modal
   const [loading, setLoading] = useState(false);
 
-  ////Function to send data to the server
+  //Find email function
   const handleSubmite = async () => {
     setLoading(true); //Activar modal de carga de espera
     try {
       const data = { email: email };
-      const response = await axios.post(
-        "http://localhost:3080/requestResetPassword/findEmail",
-        data
-      );
+      const response = await findEmail(data);
       //check if the response is correct
       if (response.status === 200) {
         handleShowVerifyCodeModal(); // show modal VerifyCodeModal
         closeFindEmailModal(); //close this modal (FindEmailModal)
         setSendEmail(email); //save the user email
-
       }
     } catch (error) {
       console.error("Error al verificar el email, error: ", error);
@@ -104,7 +103,6 @@ function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
         keyboard={false}
         size="sm"
       >
-
         <Modal.Body className="text-center border rounded  border-light bg-black">
           <div className="text-center p-3">
             <Spinner animation="grow" size="sm" variant="success" />

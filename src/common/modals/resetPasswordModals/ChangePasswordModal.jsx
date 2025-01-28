@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { resetPassword } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
 import { Modal, Button, Form } from "react-bootstrap";
 import AlertModal from "../AlertModal";
-import axios from "axios";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdError } from "react-icons/md";
 function ChangePasswordModal({
@@ -12,15 +12,18 @@ function ChangePasswordModal({
   //form states
   const [newPassword, setNewPassword] = useState(""); //save data of the input newPassword
   const [confirmPassword, setConfirmPassword] = useState(""); //save data of the input confirmPassword
+
   //Alert modal states
   const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
+
   //Atributes of the modal alert
   const [title, setTitle] = useState("");
   const [titleColor, setTitleColor] = useState("");
   const [icon, setIcon] = useState();
   const [bodyText, setBodyText] = useState("");
   const [buttonText, setButtonText] = useState("");
-  //Function to send data to the server
+
+  //Change the password of the user
   const handleSubmit = async () => {
     const data = {
       email: email, //user email
@@ -30,10 +33,7 @@ function ChangePasswordModal({
     if (newPassword === confirmPassword) {
       //send data to the server
       try {
-        const response = await axios.post(
-          "http://localhost:3080/requestResetPassword/resetPassword",
-          data
-        );
+        const response = await resetPassword(data);
         //check if the response is correct
         if (response.status === 200) {
           //close the changePasswordModal
@@ -47,10 +47,7 @@ function ChangePasswordModal({
           setShowAlertModal(true); //activate the modal alert
         }
       } catch (error) {
-        console.error(
-          "Error al intentar restaurar la contraseña, error: ",
-          error
-        );
+        console.error("Error trying to restore password, error: ", error);
         //set error alert atributs
         setTitle("Error");
         setTitleColor("text-danger");
