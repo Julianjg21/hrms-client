@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
+import { loginAdmin } from "../../../services/api/loginForms/LoginFormsApis.mjs";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../../../common/modals/AlertModal";
 function AdminForm() {
@@ -16,23 +16,22 @@ function AdminForm() {
     const typeUser = "administrator"; //type of user to enter
     //send data
     try {
-      //Send the data to the server
-      const response = await axios.post("http://localhost:3080/auth/login", {
-        email,
-        password,
-        typeUser,
-      });
+       //Send credentials to the server
+      const response = await loginAdmin(email, password, typeUser);
       //Save the token in localStorage
       localStorage.setItem("AdminToken", response.data.token);
-      localStorage.setItem("AdminPermissions", JSON.stringify(response.data.permissions));
-      localStorage.setItem("AdminUserId", response.data.userId);
-
+      localStorage.setItem(
+        "AdminPermissions",
+        JSON.stringify(response.data.permissions)
+      );
+      localStorage.setItem("AdminUserId", response.data.userId);  //Save the user id in localStorage
+      localStorage.setItem("AdminEmail", response.data.email); //Save the user email in localStorage
 
       //Navigate to the AdminPortal path
       navigate("/AdminPortal");
     } catch (error) {
       console.error(
-        "Error al iniciar sesión:",
+        "Error logging:",
         error.response?.data?.message || error.message
       );
       setShowAlertModal(true);

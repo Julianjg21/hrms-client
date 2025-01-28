@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { loginEmployee } from "../../../services/api/loginForms/LoginFormsApis.mjs";
 import { Form, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FindEmailModal from "../../../common/modals/resetPasswordModals/FindEmailModal";
 import AlertModal from "../../../common/modals/AlertModal";
@@ -22,21 +22,18 @@ function EmployeesForm() {
     const typeUser = "employee"; //user type
 
     try {
-      const response = await axios.post("http://localhost:3080/auth/login", {
-        identification,
-        password,
-        typeUser,
-      });
+      //Send credentials to the server
+      const response = await loginEmployee(identification, password, typeUser);
       //Save the token in localStorage
-      localStorage.setItem("EmployeeToken", response.data.token);
-      localStorage.setItem("EmployeePermissions", response.data.permissions);
-      localStorage.setItem("EmployeeUserId", response.data.userId);
+      localStorage.setItem("EmployeeToken", response.data.token); //Save the token in localStorage
+      localStorage.setItem("EmployeePermissions", response.data.permissions); //Save the permissions in localStorage
+      localStorage.setItem("EmployeeUserId", response.data.userId); //Save the userId in localStorage
 
       //navigate to the Employee Portal route
       navigate("/EmployeePortal");
     } catch (error) {
       console.error(
-        "Error al iniciar sesión:",
+        "Error logging:",
         error.response?.data?.message || error.message
       );
       setShowAlertModal(true);

@@ -8,6 +8,7 @@ function LoginForm() {
   const [employeeButtonColor, setEmployeeButtonColor] =
     useState("text-bg-light");
 
+  //hooks
   const navigate = useNavigate(); // useNavigate hook
   const location = useLocation(); // useLocation hook
 
