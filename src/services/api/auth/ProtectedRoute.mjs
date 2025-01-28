@@ -13,6 +13,7 @@ const ProtectedRoute = () => {
     let tokenKey = ""; //variable to store the token
     let userPermissions = []; //variable to store the user's role permissions
     let userId = "";
+    let adminEmail = "";
     //verify which route the client is trying to access to determine which access token it should verify
     if (location.pathname.startsWith("/EmployeePortal")) {
       tokenKey = "EmployeeToken";
@@ -22,6 +23,7 @@ const ProtectedRoute = () => {
       tokenKey = "AdminToken";
       userPermissions = "AdminPermissions";
       userId = "AdminUserId";
+      adminEmail = "AdminEmail";
     }
 
     //Get the token saved in the cookies
@@ -50,6 +52,7 @@ const ProtectedRoute = () => {
         localStorage.removeItem(tokenKey); //If the token is invalid, remove the token
         localStorage.removeItem(userPermissions);
         localStorage.removeItem(userId);
+        localStorage.removeItem(adminEmail);
         localStorage.removeItem("AllPermissions");
 
         navigate("/login"); //Redirect to login if token is invalid
