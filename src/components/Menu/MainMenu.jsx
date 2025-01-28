@@ -8,10 +8,10 @@ function MainMenu({ MenuButtons }) {
   //State to handle whether the form is collapsed or not
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  //  access the current URL path.
+  //Access the current URL path.
   const location = useLocation();
 
-  // Check if the current path matches either '/AdminPortal' or '/EmployeePortal'.
+  //Check if the current path matches either '/AdminPortal' or '/EmployeePortal'.
   const isHomeRootRoute =
     location.pathname === "/AdminPortal" ||
     location.pathname === "/EmployeePortal";
