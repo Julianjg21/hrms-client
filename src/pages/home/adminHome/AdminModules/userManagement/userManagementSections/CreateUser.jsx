@@ -6,7 +6,7 @@ import {
   selectPermissions,
   extractUsedPermissions,
 } from "../../../../../../utils/utils.mjs";
-import Axios from "axios";
+import { createUser } from "../../../../../../services/api/userManagement/UserManagementApis.mjs";
 import { FaCheckCircle } from "react-icons/fa";
 
 function CreateUser() {
@@ -23,6 +23,7 @@ function CreateUser() {
   const [accountNumber, setAccountNumber] = useState("");
   const [email, setEmail] = useState("");
   const [employeeType, setEmployeeType] = useState("Bartender");
+
   //Atributes of the modal alert
   const [title, setTitle] = useState("");
   const [titleColor, setTitleColor] = useState("");
@@ -30,10 +31,12 @@ function CreateUser() {
   const [bodyText, setBodyText] = useState("");
   const [buttonText, setButtonText] = useState("");
   const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
-  const [requiredPermissions, setRequiredPermissions] = useState([]);
-  const [permissions, setPermissions] = useState([]);
-  const [userId, setUserId] = useState();
-  const [token, setToken] = useState();
+
+  //States to manage permissions and user data
+  const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions required to create a user
+  const [permissions, setPermissions] = useState([]); //Permissions extracted from the required permissions
+  const [userId, setUserId] = useState(); //Id of the user logged in
+  const [token, setToken] = useState(); //Token of the user logged in
 
   useEffect(() => {
     // First get the required permissions
@@ -51,7 +54,6 @@ function CreateUser() {
       "create_user",
     ]);
     setRequiredPermissions(getPermissions);
-
     // Then extract the permissions
     const extract = extractUsedPermissions(getPermissions);
     setPermissions(extract);
@@ -60,16 +62,19 @@ function CreateUser() {
     //Then get the user token
     setToken(localStorage.getItem("AdminToken"));
   }, []);
+
   //Function to send the data to the server
   const sendData = async (e) => {
     //Prevent the page from refreshing
     e.preventDefault();
+
     //Create the user data object
     const userData = {
       email,
       identification,
       permissions,
     };
+
     //Create the user details object
     const userDetails = {
       user_names: names,
@@ -80,27 +85,19 @@ function CreateUser() {
       birth_date: birthDate, //Pass it as a string in YYYY-MM-DD format
       bank,
       account_number: accountNumber,
-      employee_type:employeeType,
+      employee_type: employeeType,
     };
 
     try {
       //Send the data to the server
-      const response = await Axios.post(
-        "http://localhost:3080/requestUserManagement/createUsers",
-        {
-          permissions, //send permissions necessary to create user
-          userId, //send the user id
-          userData, //send the user data
-          userDetails, //send the user details
-        },
-        //Send the token in the headers
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await createUser(
+        permissions, //send permissions necessary to create user
+        userId, //User id from the user logged in
+        userData, //User data
+        userDetails, //User details
+        token //Token from the user logged in
       );
+
       //If the response is 200, the user was created
       if (response.status === 200) {
         //Set the modal alert
@@ -110,9 +107,8 @@ function CreateUser() {
         setBodyText(response.data.message);
         setButtonText("Aceptar");
       }
-      console.log("User created", response);
     } catch (error) {
-      console.error("Error al crear el usuario:", error.message);
+      console.error("Error when creating the user:", error.message);
       //Set the modal alert
       setTitle("!Error¡");
       setTitleColor("text-danger");
