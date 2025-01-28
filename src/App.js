@@ -26,7 +26,7 @@ function App() {
         //store all permissions in local storage
         localStorage.setItem("AllPermissions", JSON.stringify(response.data));
       } catch (error) {
-        console.error("Error al obtener los permisos:", error);
+        console.error("Error obtaining permits:", error);
       }
     };
 
