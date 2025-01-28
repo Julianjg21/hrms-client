@@ -19,7 +19,7 @@ function Footer() {
             <div className="d-flex align-items-center ">
               <FontAwesomeIcon
                 icon={faLocationDot}
-                style={{ height: "30px" }} // Agregamos un margen entre el ícono y el texto
+                style={{ height: "30px" }} 
               />
               <p className="mb-0">
                 Calle XXXXXXX <br />

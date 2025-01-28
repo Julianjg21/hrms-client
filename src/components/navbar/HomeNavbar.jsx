@@ -13,7 +13,7 @@ function HomeNavbar() {
 
   //log out the user
   const logOut = () => {
-    let tokenKey = ""; //variable to store the token
+    let tokenKey = ""; //Variable to store the token
     //verify which token should be searched according to the user's path
     if (location.pathname.startsWith("/EmployeePortal")) {
       tokenKey = "EmployeeToken";
