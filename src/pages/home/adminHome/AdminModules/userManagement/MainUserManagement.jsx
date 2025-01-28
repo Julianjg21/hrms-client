@@ -8,13 +8,13 @@ function MainUserManagement() {
   const [editUserButtonColor, setEditUserButtonColor] =
     useState("text-bg-light");
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate hook
   const location = useLocation(); // useLocation hook
 
   useEffect(() => {
     const actualLocation = location.pathname; //Get the current route
     //check the current route
-    if (actualLocation.includes("/editUser")) {
+    if (actualLocation.includes("/searchUsers") || actualLocation.includes("/editUser")) {
       setCreateUserButtonColor("text-bg-light"); //set color to the admin form  button
       setEditUserButtonColor("text-bg-dark"); // set color to the employee form button
     } else {
@@ -39,7 +39,7 @@ function MainUserManagement() {
           <Button
             variant="outline-dark"
             className={`border-warning w-100 ${editUserButtonColor} rounded-0`}
-            onClick={() => navigate("editUser")}
+            onClick={() => navigate("searchUsers")}
           >
             Modificar Usuario
           </Button>

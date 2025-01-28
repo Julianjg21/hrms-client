@@ -1,13 +1,14 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserGroup, faFolder, faBusinessTime, faCalendarDays} from "@fortawesome/free-solid-svg-icons";
+import { faUserGroup, faBusinessTime, faCalendarDays} from "@fortawesome/free-solid-svg-icons";
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { IoIosNavigate } from "react-icons/io";
 import { FaFileAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 function EmployeeMenuButtons() {
-  const navigate = useNavigate();
+
+  const navigate = useNavigate(); //Hook to navigate between sections
   return (
     <div className=" btn-group-vertical p-0">
       <Button variant="outline-dark" className=" border-warning rounded-0 text-start " onClick={() => navigate('userManagement')}>
