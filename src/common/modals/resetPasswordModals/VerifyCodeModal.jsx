@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-
-import axios from "axios";
 import ChangePasswordModal from "./ChangePasswordModal";
 import AlertModal from "../AlertModal";
-
+import { verifyCode } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
 function VerifyCodeModal({
   showVerifyCodeModal, //show verifyCodeModal
   closeShowVerifyCodeModal, //close verify code modal
@@ -14,9 +12,9 @@ function VerifyCodeModal({
   const closeChangePasswordModal = () => setShowChangePasswordModal(false); //close modal ChangePasswordModal
   const handleShowChangePasswordModal = () => setShowChangePasswordModal(true); //show modal  changePasswordState
   const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
-  const [code, setCode] = useState(Array(7).fill("")); // Inicializar  array con 7 valores vacíos.
+  const [code, setCode] = useState(Array(7).fill("")); //Initialize array with 7 empty values.
   const inputRefs = useRef([]); //store references to inputs
-  const [bodyText, setBodyText] = useState(""); //texto de la alerta
+  const [bodyText, setBodyText] = useState(""); //alert text
 
   //Handle change in each input
   const handleChange = (e, index) => {
@@ -42,23 +40,20 @@ function VerifyCodeModal({
     }
   };
 
-  //Function to send data to the server
+  //Handle form submission
   const handleSubmite = async () => {
     const codeEntered = code.join(""); //unite the numbers into a single one
     const data = { email: email, code: codeEntered };
     try {
-      //send data to the server
-      const response = await axios.post(
-        "http://localhost:3080/requestResetPassword/verifyCode",
-        data
-      );
+      //send the code to the server
+      const response = await verifyCode(data);
       //check if the response is correct
       if (response.status === 200) {
         handleShowChangePasswordModal(); //show modal changePasswordModal
         closeShowVerifyCodeModal(); //close modal verifyCodeModal
       }
     } catch (error) {
-      console.error("Error al verificar el codigo, error: ", error);
+      console.error("Error verifying the code, error: ", error);
       setBodyText(error.response.data.message); //save the response received from the server
       setShowAlertModal(true); // show alert modal
     } finally {
