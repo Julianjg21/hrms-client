@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProtectedElements from "../../services/api/auth/ProtectedElements.mjs";
+import { useLocation } from "react-router-dom";
 import ListUsersModal from "../../common/modals/searchUsers/ListUsersModal.jsx";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import { searchUsers } from "../../services/api/searchUsers/SearchUsersApis.mjs";
@@ -10,6 +11,8 @@ import {
 import { searchEmployees } from "../../services/api/searchUsers/SearchUsersApis.mjs";
 function SearchUsers() {
   const [showListUsersModal, setShowListUsersModal] = useState(false);
+
+  const location = useLocation();
 
   //User data states
   const [userNames, setUserNames] = useState("");
@@ -199,6 +202,7 @@ function SearchUsers() {
         showListUsersModal={showListUsersModal}
         closeListUsersModal={closeListUsersModal}
         usersFound={usersFound}
+        nextRoute={location.state}
       />
     </div>
   );

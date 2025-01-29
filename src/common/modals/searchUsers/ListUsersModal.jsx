@@ -5,12 +5,13 @@ function ListUsersModal({
   showListUsersModal,
   closeListUsersModal,
   usersFound,
+  nextRoute
 }) {
   const navigate = useNavigate(); //We use the useNavigate hook
 
   //Navigate to the next route
   const navigateNextRoute = (item) => {
-    navigate("/AdminPortal/userManagement/editUser", { state: item });
+    navigate(nextRoute, { state: item });
   };
   return (
     <Modal
