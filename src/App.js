@@ -17,6 +17,7 @@ import CreateUser from "./pages/home/adminHome/AdminModules/userManagement/userM
 import MainUserManagement from "./pages/home/adminHome/AdminModules/userManagement/MainUserManagement";
 import EditUser from "./pages/home/adminHome/AdminModules/userManagement/userManagementSections/EditeUser";
 import SearchUsers from "./components/users/SearchUsers";
+import MainEmployeeDocumentation from "./pages/home/adminHome/AdminModules/employeeDocuments/MainEmployeeDocumentation";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
@@ -56,6 +57,7 @@ function App() {
               <Route path="searchUsers" element={<SearchUsers />} />
               <Route path="editUser" element={<EditUser />} />
             </Route>
+            <Route path="employeeDocumentation" element={<MainEmployeeDocumentation />}/>
           </Route>
           {/* Employee portal route, only accessible for employees */}
           <Route path="/EmployeePortal" element={<EmployeePortalPage />} />

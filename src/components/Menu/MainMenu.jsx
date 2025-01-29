@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
-import MainUserManagement from "../../pages/home/adminHome/AdminModules/userManagement/MainUserManagement";
 import { Outlet, useLocation } from "react-router-dom";
 import company_logo from "../../assets/login/company_logo.png";
 function MainMenu({ MenuButtons }) {
