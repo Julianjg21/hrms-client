@@ -23,6 +23,8 @@ function MainUserManagement() {
     }
   }, [location]); //react to changes
 
+  const editUserRoute = "/AdminPortal/userManagement/editUser"; //route to edit user
+
   return (
     <div className="container w-100">
       <div className="row ">
@@ -39,7 +41,7 @@ function MainUserManagement() {
           <Button
             variant="outline-dark"
             className={`border-warning w-100 ${editUserButtonColor} rounded-0`}
-            onClick={() => navigate("searchUsers")}
+            onClick={() => navigate("searchUsers",{ state: editUserRoute })}
           >
             Modificar Usuario
           </Button>
