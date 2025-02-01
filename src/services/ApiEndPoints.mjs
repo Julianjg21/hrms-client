@@ -11,4 +11,7 @@ export const API_ROUTES = {
   editUserData: `${process.env.REACT_APP_API_BASE_URL}/requestUserManagement/editUserData`,
   createUser: `${process.env.REACT_APP_API_BASE_URL}/requestUserManagement/createUsers`,
   verifyPassword: `${process.env.REACT_APP_API_BASE_URL}/auth/verifyUserPassword`,
+  uploadUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/uploadUserDocuments`,
+  getUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/getUserDocuments`,
+  downloadUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/downloadUserDocuments`,
 };
