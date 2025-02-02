@@ -66,14 +66,14 @@ function EmployeeFiles() {
     // Then get the user token
     const token = localStorage.getItem("AdminToken");
     setToken(token);
-  }, []); // Este useEffect solo se ejecuta una vez, al montar el componente
+  }, []);
 
   useEffect(() => {
-    // Verifica que todas las dependencias necesarias estén disponibles
+   //Verify that all the necessary units are available
     if (userId && token && permissions) {
       getFiles(); // Get the files from the database
     }
-  }, [userId, token, permissions]); // Este useEffect se ejecuta cuando userId, token o permissions cambian
+  }, [userId, token, permissions]);
 
   // Function to fetch files associated with a user
   const getFiles = async () => {
@@ -118,13 +118,11 @@ function EmployeeFiles() {
     const formData = new FormData();
     formData.append("file", file); // Append the file
     formData.append("document_type", id); // Append document type
-    formData.append("userId", userId); // Append admin user ID
     formData.append("user_id", userData.user_id); // Append employee user ID
-    formData.append("permissions", JSON.stringify(permissions)); // Convert permissions to JSON
 
     try {
       // Upload the document and handle the response
-      const response = await uploadUserDocuments(formData, token);
+      const response = await uploadUserDocuments(formData, token, userId, permissions );
       setMessage({ message: response.data.message, id: id }); // Show success message
       setFile(null); // Clear the file input
       getFiles(); // Refresh the file list
@@ -137,10 +135,9 @@ function EmployeeFiles() {
   // Function to handle file download
   const handleDownload = async (id) => {
     const data = {
-      user_id: userData.user_id, // Employee user ID
       permissions, // Necessary permissions
       userId, // Admin user ID
-      id, // Document ID
+      "documentId":id, // Document ID
     };
 
     try {
@@ -210,7 +207,7 @@ function EmployeeFiles() {
                 onSubmit={(e) => handleSubmit(e, input.id)}
                 className="border-top border-2 border-secondary border-opacity-50"
               >
-                <Form.Group key={index}>
+                <Form.Group key={index} controlId={`formInput${index}`}>
                   <Form.Label className=" fw-bold">
                     {input.type_document}
                   </Form.Label>
