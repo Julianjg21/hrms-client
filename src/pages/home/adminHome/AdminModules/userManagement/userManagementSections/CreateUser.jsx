@@ -33,7 +33,7 @@ function CreateUser() {
   const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
 
   //States to manage permissions and user data
-  const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions required to create a user
+  const [requiredPermissions, setRequiredPermissions] = useState([""]); //Permissions required to create a user
   const [permissions, setPermissions] = useState([]); //Permissions extracted from the required permissions
   const [userId, setUserId] = useState(); //Id of the user logged in
   const [token, setToken] = useState(); //Token of the user logged in
@@ -221,7 +221,7 @@ function CreateUser() {
                 <div className="col-6">
                   <Form.Group
                     className="mb-3"
-                    controlId="userIdentificationInput"
+                    controlId="userNumberPhoneInput"
                   >
                     <Form.Label className="float-start">Telefono</Form.Label>
                     <ProtectedElements

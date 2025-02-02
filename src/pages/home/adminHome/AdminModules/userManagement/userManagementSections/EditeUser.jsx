@@ -49,6 +49,7 @@ function EditUser() {
   //Permissions and user data
   const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions required to create a user
   const [permissions, setPermissions] = useState([]); //Permissions extracted from the required permissions
+  const [requiredDeletePermissions, setRequiredDeletePermissions] = useState([]);
   const [userId, setUserId] = useState(); //Id of the user logged in
   const [token, setToken] = useState(); //Token of the user logged in
 
@@ -68,9 +69,13 @@ function EditUser() {
       "edit_employee_role",
       "edit_bank_name",
       "edit_account_number",
-      "delete_user",
-      "create_user",
+      "update_user_data"
     ]);
+    const getDeletePermissions = selectPermissions([
+   "delete_user"
+    ]);
+    setRequiredDeletePermissions(getDeletePermissions);
+
     setRequiredPermissions(getPermissions);
 
     // Then extract the permissions
@@ -102,7 +107,7 @@ function EditUser() {
       bank,
       account_number: accountNumber,
       employee_type: employeeType,
-      user_id: dataUser.user_id,
+
     };
 
     try {
@@ -112,7 +117,8 @@ function EditUser() {
         userId, //Id of the user logged in
         userData, //User data
         userDetails, //User details
-        token //Token of the user logged in
+        token, //Token of the user logged in
+        dataUser.user_id
       );
       //If the response is 200, the user was edited successfully
       if (response.status === 200) {
@@ -247,7 +253,7 @@ function EditUser() {
                 <div className="col-6">
                   <Form.Group
                     className="mb-3"
-                    controlId="userIdentificationInput"
+                    controlId="userNumberPhoneInput"
                   >
                     <Form.Label className="float-start">Telefono</Form.Label>
                     <ProtectedElements
@@ -385,7 +391,7 @@ function EditUser() {
             <div className="row mt-5 mb-3">
               <div className="col-4 float-start">
                 <ProtectedElements
-                  requiredPermission={requiredPermissions.delete_user}
+                  requiredPermission={requiredDeletePermissions.delete_user}
                 >
                   <Button
                     type="button"
@@ -400,7 +406,7 @@ function EditUser() {
               </div>
               <div className="col-4 d-flex justify-content-center">
                 <ProtectedElements
-                  requiredPermission={requiredPermissions.create_user}
+                  requiredPermission={requiredPermissions.update_user_data}
                 >
                   <Button
                     variant="warning"
