@@ -53,12 +53,15 @@ function SearchUsers() {
       user_names: userNames, //User names
       type_identification: identificationType, //Type of identification
       identification: identification, //Identification number
-      permissions, //Permissions requied to access the component
-      userId, //User id from the admin logged in
     };
     try {
       //Search the user with the data provided
-      const response = await searchUsers(data, token);
+      const response = await searchUsers(
+        data,// user data
+        token, //Token of authentication
+        permissions, //Permissions requied to access the component
+        userId //User id from the admin logged in
+      );
       if (response.status === 200) {
         //If the user is found
         setUsersFound(response.data); //Save in the state  the user found
@@ -72,13 +75,16 @@ function SearchUsers() {
   //Function to search employees by type of area
   const handleSeachEmployees = async (value) => {
     const data = {
-      permissions,
-      userId,
       employee_type: value,
     };
 
     try {
-      const response = await searchEmployees(data, token);
+      const response = await searchEmployees(
+        data,
+        token,
+        permissions, //Permissions requied to access the component
+        userId //User id from the admin logged in
+      );
       if (response.status === 200) {
         setUsersFound(response.data); //Save in the state the users found
         activateListUsersModal(); //Activate the modal with the list of users found
@@ -169,8 +175,8 @@ function SearchUsers() {
               <div className="col-md-4 col-2"></div>
               <div className="col-md-4 col-8">
                 <Form>
-                  <Form.Group className="form-group">
-                    <Form.Label htmlFor="exampleSelect" className="mb-5">
+                  <Form.Group className="form-group" controlId="formTypeArea">
+                    <Form.Label  className="mb-5">
                       Buscar Usuario por Tipo de <br /> Area
                     </Form.Label>
                     <Form.Select

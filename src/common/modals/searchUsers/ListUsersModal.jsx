@@ -33,6 +33,7 @@ function ListUsersModal({
                 className="w-100 mt-1 text-start rounded-4"
                 variant="outline-dark"
                 onClick={() => navigateNextRoute(item)}
+                key={index}
               >
                 {item.user_names} - {item.identification}{" "}
                 <span className="text-primary float-end">Ver</span>
