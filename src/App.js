@@ -19,6 +19,8 @@ import EditUser from "./pages/home/adminHome/AdminModules/userManagement/userMan
 import SearchUsers from "./components/users/SearchUsers";
 import MainEmployeeDocumentation from "./pages/home/adminHome/AdminModules/employeeDocuments/MainEmployeeDocumentation";
 import EmployeeFiles from "./pages/home/adminHome/AdminModules/employeeDocuments/employeeDocumentationSections/EmployeeFiles";
+import MainPayrollManagement from "./pages/home/adminHome/AdminModules/payrollManagement/MainPayrollManagement";
+import PayrollGenerator from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/PayrollGenerator";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
@@ -61,6 +63,10 @@ function App() {
             <Route path="employeeDocumentation" element={<MainEmployeeDocumentation />}>
             <Route path="searchUsers" element={<SearchUsers />} />
             <Route path="employeeFiles" element={<EmployeeFiles />} />
+            </Route>
+            <Route path="payrollManagement" element={<MainPayrollManagement />}>
+            <Route path="searchUsers" element={<SearchUsers />} />
+            <Route path="payrollGenerator" element={<PayrollGenerator />} />
             </Route>
           </Route>
           {/* Employee portal route, only accessible for employees */}
