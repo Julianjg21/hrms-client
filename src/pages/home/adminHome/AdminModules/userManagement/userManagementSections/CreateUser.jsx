@@ -365,6 +365,7 @@ function CreateUser() {
                   variant="warning"
                   type="submit"
                   className="border border-1 text-light"
+                  title="Registrar usuario"
                 >
                   Registrar
                 </Button>

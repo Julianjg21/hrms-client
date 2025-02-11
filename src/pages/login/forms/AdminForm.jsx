@@ -65,7 +65,7 @@ function AdminForm() {
           />
         </Form.Group>
         <div className="d-flex justify-content-center mt-3 mb-3 ">
-          <Button variant="light" type="submit" className="border border-1">
+          <Button variant="light" type="submit" title="Iniciar sesión" className="border border-1">
             Ingresar
           </Button>
         </div>

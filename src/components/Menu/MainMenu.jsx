@@ -32,6 +32,7 @@ function MainMenu({ MenuButtons }) {
             className="w-100 border-warning border-opacity-50 border border-1 p-1  justify-content-between align-items-center"
             type="button"
             onClick={toggleCollapse}
+            title="Selecciionar Sección"
           >
             Options
             <span className="float-end">

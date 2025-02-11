@@ -397,6 +397,7 @@ function EditUser() {
                     type="button"
                     variant="danger"
                     onClick={() => setShowDeleteUserModal(true)}
+                    title="Eliminar Usuario"
                   >
                     Eliminar
                     <tr />
@@ -412,6 +413,7 @@ function EditUser() {
                     variant="warning"
                     type="submit"
                     className="border border-1 text-light"
+                    title="Guardar cambios"
                   >
                     Guardar <tr />
                     Cambios

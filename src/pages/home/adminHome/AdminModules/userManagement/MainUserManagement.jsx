@@ -33,6 +33,7 @@ function MainUserManagement() {
             variant="outline-dark"
             className={`border-warning ${createUserButtonColor} border-opacity-50 w-100 rounded-0`}
             onClick={() => navigate("createUser")}
+            title="Crear usuario"
           >
             Crear Usuario
           </Button>
@@ -40,6 +41,7 @@ function MainUserManagement() {
         <div className="col-6 p-0">
           <Button
             variant="outline-dark"
+            title="Modificar datos del usuario"
             className={`border-warning w-100 ${editUserButtonColor} rounded-0`}
             onClick={() => navigate("searchUsers",{ state: editUserRoute })}
           >

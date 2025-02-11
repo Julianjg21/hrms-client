@@ -93,6 +93,7 @@ function DeleteUserModal({
           type="button"
           className="border-black"
           onClick={handleVerifyUserPassword}
+          title="Confirmar contraseña"
         >
           Confirmar
         </Button>

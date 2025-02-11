@@ -35,6 +35,7 @@ function LoginForm() {
                 <Button
                   variant="primary"
                   type="button"
+                  title="Iniciar sesión para administradores"
                   value="admin"
                   className={`flex-fill h-100  ${adminButtonColor} rounded-0 border-black`}
                   style={{ minWidth: "150px" }}
@@ -45,6 +46,7 @@ function LoginForm() {
                 <Button
                   variant="primary"
                   type="button"
+                  title="Iniciar sesión como empleado"
                   value="employee"
                   className={`flex-fill h-100 rounded-0 ${employeeButtonColor} border-black`}
                   style={{ minWidth: "150px" }}

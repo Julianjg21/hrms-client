@@ -42,7 +42,7 @@ function AdminMenuButtons() {
           className="text-secondary me-1"
         />
       ),
-      path: "payroll",
+      path: "payrollManagement",
     },
     {
       label: "Calendario",
@@ -68,6 +68,7 @@ function AdminMenuButtons() {
       {buttons.map(({ label, icon, path }) => (
         <Button
           key={path}
+          title="Seleccionar sección"
           variant="outline-dark"
           className={`border-warning rounded-0 text-start ${
             activeButton.includes(path) ? "bg-dark text-light" : ""

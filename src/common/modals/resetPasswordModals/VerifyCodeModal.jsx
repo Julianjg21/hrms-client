@@ -110,6 +110,7 @@ function VerifyCodeModal({
             className=" border-black"
             onClick={handleSubmite}
             type="button"
+            title="Verificar codigo de seguridad"
           >
             Intentar
           </Button>

@@ -216,7 +216,7 @@ function EmployeeFiles() {
                     key={fileKey}
                     onChange={handleFileChange}
                   />
-                  <Button variant="secondary" className="mt-2" type="submit">
+                  <Button variant="secondary" className="mt-2" type="submit" title="Guardar archivos">
                     Subir Archivos
                   </Button>
                 </Form.Group>
@@ -243,6 +243,7 @@ function EmployeeFiles() {
                   >
                     <Button
                       className="bg-light text-danger border border-0 p-0"
+                      title="Descargar archivo"
                       onClick={() =>
                         handleDownload(filesFound[input.id][0]["id"])
                       }

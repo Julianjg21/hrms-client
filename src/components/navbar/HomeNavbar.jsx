@@ -35,7 +35,7 @@ function HomeNavbar() {
 
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
-        <Button variant="dark" className="p-2">
+        <Button variant="dark" className="p-2" titule="Notificaciones">
           <FontAwesomeIcon icon={faBell} className="text-light fs-5" />
         </Button>
 

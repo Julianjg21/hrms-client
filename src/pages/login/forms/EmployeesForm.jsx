@@ -75,12 +75,14 @@ function EmployeesForm() {
             type="submit"
             className="border border-1 d-block mx-auto"
             style={{ maxWidth: "300px" }}
+            title="Iniciar sesión"
           >
             Ingresar
           </Button>
           <Button
             variant="light"
             type="button"
+            title="Recurper contraseña"
             className="border-0 mt-1 text-black bg-white d-block mx-auto text-decoration-underline"
             style={{ maxWidth: "300px" }}
             onClick={handleFindEmailModal}

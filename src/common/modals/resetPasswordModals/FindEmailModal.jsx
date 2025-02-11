@@ -74,6 +74,7 @@ function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
             type="button"
             className=" border-black"
             onClick={handleSubmite}
+            title="Buscar email"
           >
             Buscar
           </Button>

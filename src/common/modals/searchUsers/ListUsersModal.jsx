@@ -34,6 +34,7 @@ function ListUsersModal({
                 variant="outline-dark"
                 onClick={() => navigateNextRoute(item)}
                 key={index}
+                title="Ver usuario"
               >
                 {item.user_names} - {item.identification}{" "}
                 <span className="text-primary float-end">Ver</span>

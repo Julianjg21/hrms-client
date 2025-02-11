@@ -161,6 +161,7 @@ function SearchUsers() {
                 variant="light"
                 type="submit"
                 className="mt-4 border-black"
+                title="Buscar usuarios"
               >
                 Buscar
               </Button>

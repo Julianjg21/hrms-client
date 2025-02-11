@@ -28,6 +28,7 @@ function AlertModal({
       <Modal.Footer className="border border-top-0 d-flex justify-content-center">
         <Button
           variant="light"
+          title={buttonText}
           type="button"
           className="border-black"
           onClick={onButtonClick || onClose} //Use the custom action or close the modal

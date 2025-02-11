@@ -119,6 +119,7 @@ function ChangePasswordModal({
             className=" border-black "
             onClick={handleSubmit}
             type="button"
+            title="Restaurar contraseña"
           >
             Restaurar <br />
             Contraseña
