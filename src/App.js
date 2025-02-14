@@ -21,6 +21,7 @@ import MainEmployeeDocumentation from "./pages/home/adminHome/AdminModules/emplo
 import EmployeeFiles from "./pages/home/adminHome/AdminModules/employeeDocuments/employeeDocumentationSections/EmployeeFiles";
 import MainPayrollManagement from "./pages/home/adminHome/AdminModules/payrollManagement/MainPayrollManagement";
 import PayrollGenerator from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/PayrollGenerator";
+import DownloadPayrollExtract from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/DownloadPayrollExtract";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
@@ -55,18 +56,28 @@ function App() {
           <Route path="/AdminPortal" element={<AdminPortalPage />}>
             {/* child routes*/}
             <Route path="userManagement" element={<MainUserManagement />}>
+              {/* child routes*/}
               <Route index element={<Navigate to="createUser" />} />
               <Route path="createUser" element={<CreateUser />} />
               <Route path="searchUsers" element={<SearchUsers />} />
               <Route path="editUser" element={<EditUser />} />
             </Route>
-            <Route path="employeeDocumentation" element={<MainEmployeeDocumentation />}>
-            <Route path="searchUsers" element={<SearchUsers />} />
-            <Route path="employeeFiles" element={<EmployeeFiles />} />
+            <Route
+              path="employeeDocumentation"
+              element={<MainEmployeeDocumentation />}
+            >
+              <Route path="searchUsers" element={<SearchUsers />} />
+              <Route path="employeeFiles" element={<EmployeeFiles />} />
             </Route>
             <Route path="payrollManagement" element={<MainPayrollManagement />}>
-            <Route path="searchUsers" element={<SearchUsers />} />
-            <Route path="payrollGenerator" element={<PayrollGenerator />} />
+              {/* child routes*/}
+              <Route path="searchUsersPg" element={<SearchUsers />} />
+              <Route path="searchUsersPe" element={<SearchUsers />} />
+              <Route
+                path="downloadPayrollExtract"
+                element={<DownloadPayrollExtract />}
+              />
+              <Route path="payrollGenerator" element={<PayrollGenerator />} />
             </Route>
           </Route>
           {/* Employee portal route, only accessible for employees */}
