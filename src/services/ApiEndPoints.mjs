@@ -22,9 +22,13 @@ export const API_ROUTES = {
 
   //Verify credentials
   verifyPassword: `${process.env.REACT_APP_API_BASE_URL}/auth/verifyUserPassword`,
-  
+
   //user documentation
   uploadUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/uploadUserDocuments`,
   getUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/getUserDocuments`,
   downloadUserDocuments: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/downloadUserDocuments`,
+  //Generate, download and save  payroll pdf
+  generatePayrollPdf: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/generatePayrollPdf`,
+  getUserPayrollExtracts: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/getUserPayrollExtracts`,
+  downloadUserPayrollExtracts: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/downloadUserPayrollExtracts`,
 };
