@@ -7,6 +7,7 @@ const ProtectedElements = ({ requiredPermission, children }) => {
   //Get the list of permissions from localStorage
   const getPermisos = localStorage.getItem("AdminPermissions");
   const permisos = JSON.parse(getPermisos) || []; // Parsear permisos o usar un array vacío si no existen
+  console.log("r",requiredPermission )
 
   //Validate if the required permission is in the permission list
   const isBlocked = !permisos.some((permiso) => {
