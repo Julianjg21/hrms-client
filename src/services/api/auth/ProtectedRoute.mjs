@@ -38,7 +38,7 @@ const ProtectedRoute = () => {
 
     //Verify the token by sending it in the header
     axios
-      .get("http://localhost:3080/auth/protected", {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/auth/protected`, {
         headers: {
           Authorization: `Bearer ${token}`, //Send the token in the header
         },

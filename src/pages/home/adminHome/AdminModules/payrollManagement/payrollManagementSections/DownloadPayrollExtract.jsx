@@ -48,7 +48,7 @@ function DownloadPayrollExtract() {
       // Extract used permissions
       const extractedPermissions = extractUsedPermissions(getPermissions);
       setPermissions(extractedPermissions);
-      console.log(getPermissions);
+
 
       // Get user ID and token from localStorage
       setUserId(localStorage.getItem("AdminUserId"));
