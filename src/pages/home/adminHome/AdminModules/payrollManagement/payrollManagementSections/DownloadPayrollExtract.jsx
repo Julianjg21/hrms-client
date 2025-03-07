@@ -64,6 +64,7 @@ function DownloadPayrollExtract() {
     if (userId && token && permissions.length > 0) {
       getFiles(); // Fetch the files from the database
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, token, permissions]);
 
   const getFiles = async () => {

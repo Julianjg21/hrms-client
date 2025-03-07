@@ -5,10 +5,10 @@ function MainEmployeeDocumentation() {
 
   useEffect(() => {
     navigate("searchUsers", { state: "/AdminPortal/employeeDocumentation/employeeFiles" });
-  }, []); //Navigate to the searchUsers component
+  }, [navigate]); //Navigate to the searchUsers component
   return (
     <div>
-      <Outlet /> 
+      <Outlet />
     </div>
   );
 }

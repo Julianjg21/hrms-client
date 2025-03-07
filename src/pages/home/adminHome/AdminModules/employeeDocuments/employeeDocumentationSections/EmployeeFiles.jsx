@@ -73,6 +73,7 @@ function EmployeeFiles() {
     if (userId && token && permissions) {
       getFiles(); // Get the files from the database
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, token, permissions]);
 
   // Function to fetch files associated with a user

@@ -60,6 +60,7 @@ const ProtectedRoute = () => {
       .finally(() => {
         setLoading(false); //Stop loading when verification is finished
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   if (loading) {

@@ -14,7 +14,7 @@ function MainPayrollManagement() {
     navigate("searchUsersPg", {
       state: "/AdminPortal/payrollManagement/payrollGenerator",
     });
-  }, []);
+  }, [navigate]);
 
 
   // Update active button based on the current route
