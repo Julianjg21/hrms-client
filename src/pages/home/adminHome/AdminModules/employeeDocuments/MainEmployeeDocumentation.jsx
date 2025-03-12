@@ -5,7 +5,8 @@ function MainEmployeeDocumentation() {
 
   useEffect(() => {
     navigate("searchUsers", { state: "/AdminPortal/employeeDocumentation/employeeFiles" });
-  }, [navigate]); //Navigate to the searchUsers component
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); //Navigate to the searchUsers component
   return (
     <div>
       <Outlet />
