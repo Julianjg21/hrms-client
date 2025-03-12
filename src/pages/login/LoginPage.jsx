@@ -9,7 +9,7 @@ function LoginPage() {
       <header>
         <LoginNavbar />
       </header>
-      <main className="flex-grow-1 align-content-center bg-black">
+      <main className="flex-grow-1 align-content-center bg-dark">
         <LoginForm />
       </main>
       <Footer />

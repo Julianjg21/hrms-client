@@ -104,7 +104,7 @@ function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
         keyboard={false}
         size="sm"
       >
-        <Modal.Body className="text-center border rounded  border-light bg-black">
+        <Modal.Body className="text-center border rounded  border-light bg-dark">
           <div className="text-center p-3">
             <Spinner animation="grow" size="sm" variant="success" />
             <Spinner animation="grow" variant="primary" role="status">

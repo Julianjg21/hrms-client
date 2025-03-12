@@ -39,7 +39,7 @@ function AdminForm() {
   };
 
   return (
-    <div>
+    <div className="bg-light">
       <Form className="p-3" onSubmit={handleLogin}>
         <Form.Group className="mb-3" controlId="adminEmail">
           <Form.Label className="float-start">Correo</Form.Label>
