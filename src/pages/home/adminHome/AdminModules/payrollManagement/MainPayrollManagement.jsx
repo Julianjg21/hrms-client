@@ -14,7 +14,8 @@ function MainPayrollManagement() {
     navigate("searchUsersPg", {
       state: "/AdminPortal/payrollManagement/payrollGenerator",
     });
-  }, [navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   // Update active button based on the current route
