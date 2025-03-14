@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AlertModal from "../../../../../../common/modals/AlertModal";
 import DeleteUserModal from "../../../../../../common/modals/deleteUSer/DeleteUserModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
-import ProtectedElements from "../../../../../../services/api/auth/ProtectedElements.mjs";
+import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -49,7 +49,9 @@ function EditUser() {
   //Permissions and user data
   const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions required to create a user
   const [permissions, setPermissions] = useState([]); //Permissions extracted from the required permissions
-  const [requiredDeletePermissions, setRequiredDeletePermissions] = useState([]);
+  const [requiredDeletePermissions, setRequiredDeletePermissions] = useState(
+    []
+  );
   const [userId, setUserId] = useState(); //Id of the user logged in
   const [token, setToken] = useState(); //Token of the user logged in
 
@@ -69,11 +71,9 @@ function EditUser() {
       "edit_employee_role",
       "edit_bank_name",
       "edit_account_number",
-      "update_user_data"
+      "update_user_data",
     ]);
-    const getDeletePermissions = selectPermissions([
-   "delete_user"
-    ]);
+    const getDeletePermissions = selectPermissions(["delete_user"]);
     setRequiredDeletePermissions(getDeletePermissions);
 
     setRequiredPermissions(getPermissions);
@@ -107,7 +107,6 @@ function EditUser() {
       bank,
       account_number: accountNumber,
       employee_type: employeeType,
-
     };
 
     try {
@@ -251,10 +250,7 @@ function EditUser() {
             <div className="container">
               <div className="row mt-3">
                 <div className="col-6">
-                  <Form.Group
-                    className="mb-3"
-                    controlId="userNumberPhoneInput"
-                  >
+                  <Form.Group className="mb-3" controlId="userNumberPhoneInput">
                     <Form.Label className="float-start">Telefono</Form.Label>
                     <ProtectedElements
                       requiredPermission={

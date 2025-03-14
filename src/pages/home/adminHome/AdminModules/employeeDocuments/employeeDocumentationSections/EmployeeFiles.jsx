@@ -6,7 +6,7 @@ import {
   getUserDocuments,
   uploadUserDocuments,
 } from "../../../../../../services/api/employeeFiles/EmployeeFilesApi.mjs";
-import ProtectedElements from "../../../../../../services/api/auth/ProtectedElements.mjs";
+import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -69,11 +69,11 @@ function EmployeeFiles() {
   }, []);
 
   useEffect(() => {
-   //Verify that all the necessary units are available
+    //Verify that all the necessary units are available
     if (userId && token && permissions) {
       getFiles(); // Get the files from the database
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, token, permissions]);
 
   // Function to fetch files associated with a user
@@ -123,7 +123,12 @@ function EmployeeFiles() {
 
     try {
       // Upload the document and handle the response
-      const response = await uploadUserDocuments(formData, token, userId, permissions );
+      const response = await uploadUserDocuments(
+        formData,
+        token,
+        userId,
+        permissions
+      );
       setMessage({ message: response.data.message, id: id }); // Show success message
       setFile(null); // Clear the file input
       getFiles(); // Refresh the file list
@@ -138,7 +143,7 @@ function EmployeeFiles() {
     const data = {
       permissions, // Necessary permissions
       userId, // Admin user ID
-      "documentId":id, // Document ID
+      documentId: id, // Document ID
     };
 
     try {
@@ -217,7 +222,12 @@ function EmployeeFiles() {
                     key={fileKey}
                     onChange={handleFileChange}
                   />
-                  <Button variant="secondary" className="mt-2" type="submit" title="Guardar archivos">
+                  <Button
+                    variant="secondary"
+                    className="mt-2"
+                    type="submit"
+                    title="Guardar archivos"
+                  >
                     Subir Archivos
                   </Button>
                 </Form.Group>

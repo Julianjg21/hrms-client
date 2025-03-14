@@ -5,7 +5,7 @@ import EmployeesForm from "./pages/login/forms/EmployeesForm";
 import LoginPage from "./pages/login/LoginPage";
 import AdminPortalPage from "./pages/home/adminHome/AdminPortalPage";
 import "./App.css";
-import ProtectedRoute from "./services/api/auth/ProtectedRoute.mjs";
+import ProtectedRoute from "./hooks/ProtectedRoute.mjs";
 import EmployeePortalPage from "./pages/home/employeeHome/EmployeePortalPage";
 import {
   BrowserRouter as Router,

@@ -9,7 +9,7 @@ import {
   extractUsedPermissions,
 } from "../../../../../../utils/utils.mjs";
 import AlertModal from "../../../../../../common/modals/AlertModal";
-import ProtectedElements from "../../../../../../services/api/auth/ProtectedElements.mjs";
+import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 function PayrollGenerator() {
   // Get user data from location state
   const location = useLocation();

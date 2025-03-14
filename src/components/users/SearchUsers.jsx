@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ProtectedElements from "../../services/api/auth/ProtectedElements.mjs";
+import ProtectedElements from "../../hooks/ProtectedElements.mjs";
 import { useLocation } from "react-router-dom";
 import ListUsersModal from "../../common/modals/searchUsers/ListUsersModal.jsx";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
@@ -57,7 +57,7 @@ function SearchUsers() {
     try {
       //Search the user with the data provided
       const response = await searchUsers(
-        data,// user data
+        data, // user data
         token, //Token of authentication
         permissions, //Permissions requied to access the component
         userId //User id from the admin logged in
@@ -177,7 +177,7 @@ function SearchUsers() {
               <div className="col-md-4 col-8">
                 <Form>
                   <Form.Group className="form-group" controlId="formTypeArea">
-                    <Form.Label  className="mb-5">
+                    <Form.Label className="mb-5">
                       Buscar Usuario por Tipo de <br /> Area
                     </Form.Label>
                     <Form.Select

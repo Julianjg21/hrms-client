@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AlertModal from "../../../../../../common/modals/AlertModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
-import ProtectedElements from "../../../../../../services/api/auth/ProtectedElements.mjs";
+import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -219,10 +219,7 @@ function CreateUser() {
             <div className="container">
               <div className="row mt-3">
                 <div className="col-6">
-                  <Form.Group
-                    className="mb-3"
-                    controlId="userNumberPhoneInput"
-                  >
+                  <Form.Group className="mb-3" controlId="userNumberPhoneInput">
                     <Form.Label className="float-start">Telefono</Form.Label>
                     <ProtectedElements
                       requiredPermission={
