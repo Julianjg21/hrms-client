@@ -14,26 +14,20 @@ body {
 }
 
 /* LockWrapper.css */
-.lock-wrapper {
-  position: relative;
-}
-
 .lock-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
-  z-index: 2;
+  background: rgba(255, 255, 255, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
-  pointer-events: none; /* Evita que interfiera con el contenido */
-  border-radius: inherit; /* Se adapta al elemento hijo si tiene bordes redondeados */
+  justify-content: center;
+  pointer-events: all; /*Block Clicks */
 }
 
-.lock-icon {
-  font-size: 1.5rem; /* Tamaño del icono */
-  color: gray;
+.disabled {
+  pointer-events: none; /*Avoid interaction with the element */
+  opacity: 0.5;
 }
