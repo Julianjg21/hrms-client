@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import * as Sentry from "@sentry/react";
 import { Form, Button } from "react-bootstrap";
 import { FaCheckCircle } from "react-icons/fa";
 import CurrencyInput from "react-currency-input-field";
@@ -180,7 +181,7 @@ function PayrollGenerator() {
       setIcon(<FaCheckCircle className="text-danger fs-1" />);
       setBodyText(error.response?.data?.message || "Error desconocido.");
       setButtonText("Aceptar");
-      console.error("Error al manejar el PDF:", error);
+      Sentry.captureException(error); // Capture the error in Sentry
     } finally {
       setShowAlertModal(true);
     }

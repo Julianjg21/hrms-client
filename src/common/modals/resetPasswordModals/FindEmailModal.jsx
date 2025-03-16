@@ -4,7 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import VerifyCodeModal from "./VerifyCodeModal";
 import AlertModal from "../AlertModal";
 import Spinner from "react-bootstrap/Spinner";
-
+import * as Sentry from "@sentry/react";
 function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
   //form states
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ function FindEmailModal({ showFindEmailModal, closeFindEmailModal }) {
         setSendEmail(email); //save the user email
       }
     } catch (error) {
-      console.error("Error al verificar el email, error: ", error);
+      Sentry.captureException(error); // Capture the error in Sentry
       setBodyText(error.response.data.message); //set error alert attributes
       setShowAlertModal(true); // activate alert modal
     } finally {

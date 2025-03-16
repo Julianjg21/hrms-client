@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/react";
 import { resetPassword } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
 import { Modal, Button, Form } from "react-bootstrap";
 import AlertModal from "../AlertModal";
@@ -47,7 +48,7 @@ function ChangePasswordModal({
           setShowAlertModal(true); //activate the modal alert
         }
       } catch (error) {
-        console.error("Error trying to restore password, error: ", error);
+        Sentry.captureException(error); // Capture the error in Sentry
         //set error alert atributs
         setTitle("Error");
         setTitleColor("text-danger");

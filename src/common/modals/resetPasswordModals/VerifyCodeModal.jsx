@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import ChangePasswordModal from "./ChangePasswordModal";
+import * as Sentry from "@sentry/react";
 import AlertModal from "../AlertModal";
 import { verifyCode } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
 function VerifyCodeModal({
@@ -53,7 +54,7 @@ function VerifyCodeModal({
         closeShowVerifyCodeModal(); //close modal verifyCodeModal
       }
     } catch (error) {
-      console.error("Error verifying the code, error: ", error);
+      Sentry.captureException(error); // Capture the error in Sentry
       setBodyText(error.response.data.message); //save the response received from the server
       setShowAlertModal(true); // show alert modal
     } finally {

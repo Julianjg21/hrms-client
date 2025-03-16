@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
-
+import * as Sentry from "@sentry/react";
 // Function to upload user documents to the server
 export const uploadUserDocuments = async (
   formData,
@@ -24,7 +24,7 @@ export const uploadUserDocuments = async (
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error when you upload the file", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };
@@ -46,7 +46,7 @@ export const getUserDocuments = async (data, token) => {
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error obtaining files", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };
@@ -69,7 +69,7 @@ export const downloadUserDocuments = async (data, token) => {
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error downloading the file", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };
@@ -92,7 +92,7 @@ export const generatePayrollPdf = async (payrollData, token, data) => {
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error creating and saving the pdf", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };
@@ -114,7 +114,7 @@ export const getUserPayrollExtracts = async (data, token) => {
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error obtaining files", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };
@@ -137,7 +137,7 @@ export const downloadUserPayrollExtracts = async (data, token) => {
     );
     return response; // Return server response
   } catch (error) {
-    console.log("Error downloading the file", error); // Log the error
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error; // Propagate the error for further handling
   }
 };

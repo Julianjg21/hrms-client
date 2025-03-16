@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loginEmployee } from "../../../services/api/loginForms/LoginFormsApis.mjs";
 import { Form, Button } from "react-bootstrap";
+import * as Sentry from "@sentry/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -32,10 +33,7 @@ function EmployeesForm() {
       //navigate to the Employee Portal route
       navigate("/EmployeePortal");
     } catch (error) {
-      console.error(
-        "Error logging:",
-        error.response?.data?.message || error.message
-      );
+      Sentry.captureException(error); // Capture the error in Sentry
       setShowAlertModal(true);
     }
   };

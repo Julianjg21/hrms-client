@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import { loginAdmin } from "../../../services/api/loginForms/LoginFormsApis.mjs";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../../../common/modals/AlertModal";
+import * as Sentry from "@sentry/react";
 function AdminForm() {
   const [email, setEmail] = useState(""); //user email
   const [password, setPassword] = useState(""); // user password
@@ -30,10 +31,7 @@ function AdminForm() {
       //Navigate to the AdminPortal path
       navigate("/AdminPortal");
     } catch (error) {
-      console.error(
-        "Error logging:",
-        error.response?.data?.message || error.message
-      );
+         Sentry.captureException(error); // Capture the error in Sentry
       setShowAlertModal(true);
     }
   };

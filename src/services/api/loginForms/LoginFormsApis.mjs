@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
-
+import * as Sentry from "@sentry/react";
 //function to login the employee
 export const loginEmployee = async (
   identification, //employee identification
@@ -17,7 +17,7 @@ export const loginEmployee = async (
 
     return response;
   } catch (error) {
-    console.log("Error trying to start session", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };
@@ -38,7 +38,7 @@ export const loginAdmin = async (
 
     return response;
   } catch (error) {
-    console.log("Error trying to start session", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Sentry from "@sentry/react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { verifyUserPassword } from "../../../services/api/auth/VerifyUserCredentials.mjs";
 import { deleteUser } from "../../../services/api/userManagement/UserManagementApis.mjs";
@@ -33,7 +34,7 @@ function DeleteUserModal({
     };
     try {
       const response = await verifyUserPassword(
-        data,//User data
+        data, //User data
         token, //token of authentication
         permissions, //Permissions necessary to delete the user
         userId // userId of the admin
@@ -43,7 +44,7 @@ function DeleteUserModal({
         handleDeleteUser(); //Delete the user from  the data bases
       }
     } catch (error) {
-      console.log("Error when verifying the password.");
+      Sentry.captureException(error); // Capture the error in Sentry
       setWarning("¡Contraseña incorrecta!");
     }
   };
@@ -53,7 +54,7 @@ function DeleteUserModal({
       await deleteUser(dataUser.user_id, token, permissions, userId);
       deleteUserConfirmation(); //confirmation that the user was deleted
     } catch (error) {
-      console.error("Error deleting the user:", error.message);
+      Sentry.captureException(error); // Capture the error in Sentry
     }
   };
   return (

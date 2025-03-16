@@ -3,6 +3,7 @@ import AlertModal from "../../../../../../common/modals/AlertModal";
 import DeleteUserModal from "../../../../../../common/modals/deleteUSer/DeleteUserModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
+import * as Sentry from "@sentry/react";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -129,7 +130,7 @@ function EditUser() {
         setButtonText("Aceptar");
       }
     } catch (error) {
-      console.error("Error when updating user data:", error.message);
+      Sentry.captureException(error); // Capture the error in Sentry
       //Set the modal alert
       setTitle("!Error¡");
       setTitleColor("text-danger");

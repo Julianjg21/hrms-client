@@ -3,6 +3,7 @@ import { getPermissions } from "./services/api/app/AppApis.mjs";
 import AdminForm from "./pages/login/forms/AdminForm";
 import EmployeesForm from "./pages/login/forms/EmployeesForm";
 import LoginPage from "./pages/login/LoginPage";
+import * as Sentry from "@sentry/react";
 import AdminPortalPage from "./pages/home/adminHome/AdminPortalPage";
 import "./App.css";
 import ProtectedRoute from "./hooks/ProtectedRoute.mjs";
@@ -31,7 +32,7 @@ function App() {
         //store all permissions in local storage
         localStorage.setItem("AllPermissions", JSON.stringify(response.data));
       } catch (error) {
-        console.error("Error obtaining permits:", error);
+        Sentry.captureException(error); // Capture the error in Sentry
       }
     };
 

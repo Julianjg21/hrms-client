@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Form, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import * as Sentry from "@sentry/react";
 import {
   getUserPayrollExtracts,
   downloadUserPayrollExtracts,
@@ -49,7 +50,6 @@ function DownloadPayrollExtract() {
       const extractedPermissions = extractUsedPermissions(getPermissions);
       setPermissions(extractedPermissions);
 
-
       // Get user ID and token from localStorage
       setUserId(localStorage.getItem("AdminUserId"));
       setToken(localStorage.getItem("AdminToken"));
@@ -64,7 +64,7 @@ function DownloadPayrollExtract() {
     if (userId && token && permissions.length > 0) {
       getFiles(); // Fetch the files from the database
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, token, permissions]);
 
   const getFiles = async () => {
@@ -85,7 +85,7 @@ function DownloadPayrollExtract() {
         setPayrollExtractId(response.data[0].id);
       }
     } catch (error) {
-      console.error("Error obtaining files:", error); // Handle errors during file fetching
+      Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 
@@ -131,7 +131,7 @@ function DownloadPayrollExtract() {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error when downloading the file in the client:", error); // Handle download errors
+      Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 

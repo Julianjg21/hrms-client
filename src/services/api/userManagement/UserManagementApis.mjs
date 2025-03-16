@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
+import * as Sentry from "@sentry/react";
 
 //Delete user
 export const deleteUser = async (
@@ -9,20 +10,17 @@ export const deleteUser = async (
   userId //User id of the user that is deleting the user
 ) => {
   try {
-    const response = await axios.delete(
-      `${API_ROUTES.deleteUser}/${user_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          "x-user-id": userId,  //user id of the admin
-          "x-permissions": JSON.stringify(permissions),//Convert object to String Json
-        },
-      }
-    );
+    const response = await axios.delete(`${API_ROUTES.deleteUser}/${user_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "x-user-id": userId, //user id of the admin
+        "x-permissions": JSON.stringify(permissions), //Convert object to String Json
+      },
+    });
     return response;
   } catch (error) {
-    console.log("Error when trying to delete the user", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };
@@ -50,15 +48,15 @@ export const updateUserData = async (
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          "x-user-id": userId,  //user id of the admin
-          "x-permissions": JSON.stringify(permissions),//Convert object to String Json
+          "x-user-id": userId, //user id of the admin
+          "x-permissions": JSON.stringify(permissions), //Convert object to String Json
         },
       }
     );
 
     return response;
   } catch (error) {
-    console.log("Error trying to update user data", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };
@@ -84,14 +82,14 @@ export const createUser = async (
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          "x-user-id": userId,  //user id of the admin
-          "x-permissions": JSON.stringify(permissions),//Convert object to String Json
+          "x-user-id": userId, //user id of the admin
+          "x-permissions": JSON.stringify(permissions), //Convert object to String Json
         },
       }
     );
     return response;
   } catch (error) {
-    console.log("Error when trying to create the user", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };

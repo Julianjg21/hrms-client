@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
-
+import * as Sentry from "@sentry/react";
 // Function to verify the user password
 export const verifyUserPassword = async (
   data, //User Credentials and permissions
@@ -20,7 +20,7 @@ export const verifyUserPassword = async (
 
     return response;
   } catch (error) {
-    console.log("Error al intentar verificar la contraseña", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };

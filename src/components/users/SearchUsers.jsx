@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import ListUsersModal from "../../common/modals/searchUsers/ListUsersModal.jsx";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import { searchUsers } from "../../services/api/searchUsers/SearchUsersApis.mjs";
+import * as Sentry from "@sentry/react";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -68,7 +69,7 @@ function SearchUsers() {
         activateListUsersModal(); //Activate de modal with the list of users found
       }
     } catch (error) {
-      console.log(error.message);
+     Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 
@@ -90,7 +91,7 @@ function SearchUsers() {
         activateListUsersModal(); //Activate the modal with the list of users found
       }
     } catch (error) {
-      console.log(error.message);
+        Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 

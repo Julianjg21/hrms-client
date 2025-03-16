@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
-
+import * as Sentry from "@sentry/react";
 // Function that is responsible for looking for users
 export const searchUsers = async (data, token, permissions, userId) => {
   const params = new URLSearchParams(data);
@@ -12,13 +12,13 @@ export const searchUsers = async (data, token, permissions, userId) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
           "x-user-id": userId, //user id of the admin
-          "x-permissions": JSON.stringify(permissions),//Convert object to String Json
+          "x-permissions": JSON.stringify(permissions), //Convert object to String Json
         },
       }
     );
     return response;
   } catch (error) {
-    console.log("Error when trying to search the user", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };
@@ -39,13 +39,13 @@ export const searchEmployees = async (
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
           "x-user-id": userId, //user id of the admin
-          "x-permissions": JSON.stringify(permissions),//Convert object to String Json
+          "x-permissions": JSON.stringify(permissions), //Convert object to String Json
         },
       }
     );
     return response;
   } catch (error) {
-    console.log("Error trying to find employees", error);
+    Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AlertModal from "../../../../../../common/modals/AlertModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
+import * as Sentry from "@sentry/react";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -108,7 +109,7 @@ function CreateUser() {
         setButtonText("Aceptar");
       }
     } catch (error) {
-      console.error("Error when creating the user:", error.message);
+      Sentry.captureException(error); // Capture the error in Sentry
       //Set the modal alert
       setTitle("!Error¡");
       setTitleColor("text-danger");

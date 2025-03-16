@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
+import * as Sentry from "@sentry/react";
 import {
   downloadUserDocuments,
   getUserDocuments,
@@ -100,7 +101,7 @@ function EmployeeFiles() {
       );
       setFilesFound(groupedDocuments); // Update state with grouped documents
     } catch (error) {
-      console.log("Error obtaining files", error); // Handle errors during file fetching
+      Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 
@@ -133,8 +134,8 @@ function EmployeeFiles() {
       setFile(null); // Clear the file input
       getFiles(); // Refresh the file list
     } catch (error) {
+      Sentry.captureException(error); // Capture the error in Sentry
       setMessage({ message: "Error al subir el archivo.", id: id }); // Show error message
-      console.error(error); // Log the error for debugging
     }
   };
 
@@ -179,7 +180,7 @@ function EmployeeFiles() {
       window.URL.revokeObjectURL(url);
       link.remove();
     } catch (error) {
-      console.error("Error when you download the file in the client:", error); // Handle download errors
+      Sentry.captureException(error); // Capture the error in Sentry
     }
   };
 

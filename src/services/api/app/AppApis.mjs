@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_ROUTES } from "../../ApiEndPoints.mjs";
-
+import * as Sentry from "@sentry/react";
 export const getPermissions = async () => {
   try {
     // Get all permissions from the server
@@ -9,7 +9,7 @@ export const getPermissions = async () => {
     );
     return response;
   } catch (error) {
-    console.log("Error trying to obtain all permits", error);
+      Sentry.captureException(error); // Capture the error in Sentry
     throw error;
   }
 };
