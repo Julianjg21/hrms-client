@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import AlertModal from "../../../../../../common/modals/AlertModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
+import createAlertData from "../../../../../../hooks/CreateAlertData.mjs";
 import * as Sentry from "@sentry/react";
 import {
   selectPermissions,
   extractUsedPermissions,
 } from "../../../../../../utils/utils.mjs";
 import { createUser } from "../../../../../../services/api/userManagement/UserManagementApis.mjs";
-import { FaCheckCircle } from "react-icons/fa";
 
 function CreateUser() {
   //States of the form
@@ -85,6 +85,7 @@ function CreateUser() {
       employee_type: employeeType,
     };
 
+    let alertData;
     try {
       //Send the data to the server
       const response = await createUser(
@@ -94,28 +95,19 @@ function CreateUser() {
         userDetails, //User details
         token //Token from the user logged in
       );
-
-      //If the response is 200, the user was created
-      //Set the modal alert
-
-      setAlertData({
-        title: "",
-        titleColor: "text-dark",
-        icon: <FaCheckCircle className=" text-success fs-1" />,
-        bodyText: response.data.message,
-        buttonText: "Aceptar",
-      });
+      //Server response
+      alertData = response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
     } catch (error) {
+      //Server response
+      alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
       Sentry.captureException(error); // Capture the error in Sentry
-      //Set the modal alert
-      setAlertData({
-        title: "!Error¡",
-        titleColor: "text-danger",
-        icon: <FaCheckCircle className="text-danger fs-1" />,
-        bodyText: error.response.data.message,
-        buttonText: "Aceptar",
-      });
     } finally {
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+      //Activate alert
       setShowAlertModal(true);
     }
   };
@@ -136,6 +128,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_user_names}
                   >
                     <Form.Control
+                      required
                       type="text "
                       placeholder="Nombres completos del usuario"
                       value={names} //Bind the state
@@ -152,6 +145,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_user_lastNames}
                   >
                     <Form.Control
+                      required
                       type="text"
                       placeholder="Apellidos completos del usuarios"
                       value={lastNames} //Bind the state
@@ -177,6 +171,7 @@ function CreateUser() {
                     }
                   >
                     <Form.Select
+                      required
                       value={identificationType} // Estado ligado al valor seleccionado
                       onChange={(e) => setIdentificationType(e.target.value)} // Controlador de cambios
                     >
@@ -206,6 +201,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_identification}
                   >
                     <Form.Control
+                      required
                       type="text"
                       placeholder="Numero de identificacion del usuario"
                       value={identification} //Bind the state
@@ -227,6 +223,7 @@ function CreateUser() {
                       }
                     >
                       <Form.Control
+                        required
                         type="tel"
                         placeholder="Numero de telefono de usuario"
                         value={phoneNumber} //Bind the state
@@ -245,6 +242,7 @@ function CreateUser() {
                       requiredPermission={requiredPermissions.edit_birth_date}
                     >
                       <Form.Control
+                        required
                         type="date"
                         placeholder="Selecciona tu fecha de nacimiento"
                         className="rounded-4"
@@ -267,6 +265,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_user_email}
                   >
                     <Form.Control
+                      required
                       type="email"
                       placeholder="Correo electrónico del usuario"
                       className="rounded-4"
@@ -296,6 +295,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_employee_role}
                   >
                     <Form.Select
+                      required
                       value={employeeType} // Estado ligado al valor seleccionado
                       onChange={(e) => setEmployeeType(e.target.value)} // Controlador de cambios
                     >
@@ -327,6 +327,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_bank_name}
                   >
                     <Form.Control
+                      required
                       type="text "
                       placeholder="Nombre del banco"
                       value={bank} //Bind the state
@@ -343,6 +344,7 @@ function CreateUser() {
                     requiredPermission={requiredPermissions.edit_account_number}
                   >
                     <Form.Control
+                      required
                       type="text"
                       placeholder="Numero de cuenta bancario"
                       value={accountNumber} //Bind the state
