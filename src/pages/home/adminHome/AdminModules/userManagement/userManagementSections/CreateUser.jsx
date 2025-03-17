@@ -26,12 +26,8 @@ function CreateUser() {
   const [employeeType, setEmployeeType] = useState("Bartender");
 
   //Atributes of the modal alert
-  const [title, setTitle] = useState("");
-  const [titleColor, setTitleColor] = useState("");
-  const [icon, setIcon] = useState();
-  const [bodyText, setBodyText] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   //States to manage permissions and user data
   const [requiredPermissions, setRequiredPermissions] = useState([""]); //Permissions required to create a user
@@ -100,22 +96,25 @@ function CreateUser() {
       );
 
       //If the response is 200, the user was created
-      if (response.status === 200) {
-        //Set the modal alert
-        setTitle("");
-        setTitleColor("text-dark");
-        setIcon(<FaCheckCircle className=" text-success fs-1" />);
-        setBodyText(response.data.message);
-        setButtonText("Aceptar");
-      }
+      //Set the modal alert
+
+      setAlertData({
+        title: "",
+        titleColor: "text-dark",
+        icon: <FaCheckCircle className=" text-success fs-1" />,
+        bodyText: response.data.message,
+        buttonText: "Aceptar",
+      });
     } catch (error) {
       Sentry.captureException(error); // Capture the error in Sentry
       //Set the modal alert
-      setTitle("!Error¡");
-      setTitleColor("text-danger");
-      setIcon(<FaCheckCircle className="text-danger fs-1" />);
-      setBodyText(error.response.data.message);
-      setButtonText("Aceptar");
+      setAlertData({
+        title: "!Error¡",
+        titleColor: "text-danger",
+        icon: <FaCheckCircle className="text-danger fs-1" />,
+        bodyText: error.response.data.message,
+        buttonText: "Aceptar",
+      });
     } finally {
       setShowAlertModal(true);
     }
@@ -375,11 +374,11 @@ function CreateUser() {
       <AlertModal
         show={showAlertModal}
         onClose={() => setShowAlertModal(false)}
-        title={title}
-        titleColor={titleColor}
-        icon={icon}
-        bodyText={bodyText}
-        buttonText={buttonText}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
       />
     </div>
   );
