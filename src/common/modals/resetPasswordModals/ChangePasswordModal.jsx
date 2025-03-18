@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import * as Sentry from "@sentry/react";
 import { resetPassword } from "../../../services/api/resetPasswords/ResetPassowordApis.mjs";
+import createAlertData from "../../../hooks/CreateAlertData.mjs";
 import { Modal, Button, Form } from "react-bootstrap";
 import AlertModal from "../AlertModal";
-import { FaCheckCircle } from "react-icons/fa";
-import { MdError } from "react-icons/md";
 function ChangePasswordModal({
   showChangePasswordModal, //show the modal
   closeChangePasswordModal, // close the modal
@@ -14,15 +13,9 @@ function ChangePasswordModal({
   const [newPassword, setNewPassword] = useState(""); //save data of the input newPassword
   const [confirmPassword, setConfirmPassword] = useState(""); //save data of the input confirmPassword
 
-  //Alert modal states
-  const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
-
   //Atributes of the modal alert
-  const [title, setTitle] = useState("");
-  const [titleColor, setTitleColor] = useState("");
-  const [icon, setIcon] = useState();
-  const [bodyText, setBodyText] = useState("");
-  const [buttonText, setButtonText] = useState("");
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   //Change the password of the user
   const handleSubmit = async () => {
@@ -30,33 +23,31 @@ function ChangePasswordModal({
       email: email, //user email
       newPassword: newPassword, //new password
     };
+    let alertData;
     //check if the new password and the confirmation match
     if (newPassword === confirmPassword) {
       //send data to the server
       try {
         const response = await resetPassword(data);
         //check if the response is correct
-        if (response.status === 200) {
-          //close the changePasswordModal
-          closeChangePasswordModal();
-          //set confirmation alert attributes
-          setTitle("");
-          setTitleColor("text-danger");
-          setIcon(<FaCheckCircle className="text-primary fs-1" />);
-          setBodyText(response.data.message);
-          setButtonText("Aceptar");
-          setShowAlertModal(true); //activate the modal alert
-        }
+
+        //close the changePasswordModal
+        closeChangePasswordModal();
+        //set confirmation alert attributes
+        alertData = response || {
+          data: { message: "Error desconocido.", status: 500 },
+        };
       } catch (error) {
+        //Server response
+        alertData = error.response || {
+          data: { message: "Error desconocido.", status: 500 },
+        };
         Sentry.captureException(error); // Capture the error in Sentry
         //set error alert atributs
-        setTitle("Error");
-        setTitleColor("text-danger");
-        setIcon(<MdError className="text-danger fs-1" />);
-        setBodyText(error.response.data.message);
-        setButtonText("Aceptar");
-        setShowAlertModal(true); //activate the modal alert
       } finally {
+        setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+        //Activate alert
+        setShowAlertModal(true);
         //reset form inputs
         setNewPassword("");
         setConfirmPassword("");
@@ -64,18 +55,12 @@ function ChangePasswordModal({
       //actions if passwords do not match
     } else {
       //set error alert atributs
-      setTitle("Error");
-      setTitleColor("text-danger");
-      setIcon();
-      setBodyText(
-        <>
-          Las contraseñas no coinciden.
-          <br />
-          <br />
-          "Por favor, inténtalo de nuevo."
-        </>
+      setAlertData(
+        createAlertData(
+          "Las contraseñas  no coinciden. \t Porfavor, inténtalo de nuevo.",
+          400
+        )
       );
-      setButtonText("Aceptar");
       setShowAlertModal(true); //activate the modal alert
     }
   };
@@ -130,11 +115,11 @@ function ChangePasswordModal({
       <AlertModal
         show={showAlertModal}
         onClose={() => setShowAlertModal(false)}
-        title={title}
-        titleColor={titleColor}
-        icon={icon}
-        bodyText={bodyText}
-        buttonText={buttonText}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
       />
     </>
   );

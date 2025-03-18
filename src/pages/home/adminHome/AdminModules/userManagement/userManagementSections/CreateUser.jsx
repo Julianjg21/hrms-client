@@ -107,7 +107,7 @@ function CreateUser() {
       Sentry.captureException(error); // Capture the error in Sentry
     } finally {
       setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-      //Activate alert
+    
       setShowAlertModal(true);
     }
   };
