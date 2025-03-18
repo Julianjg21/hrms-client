@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import createAlertData from "../../../../../../hooks/CreateAlertData.mjs";
+import { useNavigate } from "react-router-dom";
 import AlertModal from "../../../../../../common/modals/AlertModal";
-import DeleteUserModal from "../../../../../../common/modals/deleteUSer/DeleteUserModal";
+import DeleteUserModal from "../../../../../../common/modals/deleteUser/DeleteUserModal";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 import * as Sentry from "@sentry/react";
@@ -8,7 +10,6 @@ import {
   selectPermissions,
   extractUsedPermissions,
 } from "../../../../../../utils/utils.mjs";
-import { FaCheckCircle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { updateUserData } from "../../../../../../services/api/userManagement/UserManagementApis.mjs";
 function EditUser() {
@@ -25,6 +26,9 @@ function EditUser() {
     new Date(dataUser.birth_date).getDate()
   ).padStart(2, "0")}`;
 
+  //useNavigate hook
+  const navigate = useNavigate();
+
   //States of the form
   const [names, setNames] = useState(dataUser.user_names);
   const [lastNames, setLastNames] = useState(dataUser.last_names);
@@ -40,12 +44,8 @@ function EditUser() {
   const [employeeType, setEmployeeType] = useState(dataUser.employee_type);
 
   //Atributes of the modal alert
-  const [title, setTitle] = useState("");
-  const [titleColor, setTitleColor] = useState("");
-  const [icon, setIcon] = useState();
-  const [bodyText, setBodyText] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   //Permissions and user data
   const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions required to create a user
@@ -110,6 +110,7 @@ function EditUser() {
       employee_type: employeeType,
     };
 
+    let alertData;
     try {
       //Send the data to the server
       const response = await updateUserData(
@@ -121,34 +122,30 @@ function EditUser() {
         dataUser.user_id
       );
       //If the response is 200, the user was edited successfully
-      if (response.status === 200) {
-        //Set the modal alert
-        setTitle("");
-        setTitleColor("text-dark");
-        setIcon(<FaCheckCircle className=" text-success fs-1" />);
-        setBodyText(response.data.message);
-        setButtonText("Aceptar");
-      }
-    } catch (error) {
-      Sentry.captureException(error); // Capture the error in Sentry
+
       //Set the modal alert
-      setTitle("!Error¡");
-      setTitleColor("text-danger");
-      setIcon(<FaCheckCircle className="text-danger fs-1" />);
-      setBodyText(error.response.data.message);
-      setButtonText("Aceptar");
+      alertData = response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+    } catch (error) {
+      //Server response
+      alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      Sentry.captureException(error); // Capture the error in Sentry
     } finally {
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+      //Activate alert
       setShowAlertModal(true);
     }
   };
 
   const deleteUserConfirmation = (params) => {
     setShowDeleteUserModal(false);
-    setTitle("");
-    setTitleColor("text-dark");
-    setIcon(<FaCheckCircle className=" text-success fs-1" />);
-    setBodyText("¡Usuario eliminado con exito!");
-    setButtonText("Aceptar");
+    setAlertData(createAlertData("¡Usuario eliminado con exito!", 200)); //Save server response on the alert
+    navigate("/AdminPortal/userManagement/searchUsers");
+    window.location.reload();
+    //Activate alert
     setShowAlertModal(true);
   };
 
@@ -425,11 +422,11 @@ function EditUser() {
       <AlertModal
         show={showAlertModal}
         onClose={() => setShowAlertModal(false)}
-        title={title}
-        titleColor={titleColor}
-        icon={icon}
-        bodyText={bodyText}
-        buttonText={buttonText}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
       />
       <DeleteUserModal
         permissions={permissions}
