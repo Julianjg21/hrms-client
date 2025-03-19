@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import AlertModal from "../../../../../../common/modals/AlertModal";
+import createAlertData from "../../../../../../hooks/CreateAlertData.mjs";
 import { Table, Form, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import * as Sentry from "@sentry/react";
@@ -15,6 +17,10 @@ function DownloadPayrollExtract() {
   // Get user data from location state
   const location = useLocation();
   const userData = location.state;
+
+  //Atributes of the modal alert
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   // State for files and selections
   const [filesFound, setFilesFound] = useState([]); // Files found in the database
@@ -85,6 +91,12 @@ function DownloadPayrollExtract() {
         setPayrollExtractId(response.data[0].id);
       }
     } catch (error) {
+      const alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+
+      setShowAlertModal(true);
       Sentry.captureException(error); // Capture the error in Sentry
     }
   };
@@ -132,6 +144,12 @@ function DownloadPayrollExtract() {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       Sentry.captureException(error); // Capture the error in Sentry
+      const alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+
+      setShowAlertModal(true);
     }
   };
 
@@ -202,6 +220,15 @@ function DownloadPayrollExtract() {
           </div>
         </Form>
       </div>
+      <AlertModal
+        show={showAlertModal}
+        onClose={() => setShowAlertModal(false)}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
+      />
     </div>
   );
 }

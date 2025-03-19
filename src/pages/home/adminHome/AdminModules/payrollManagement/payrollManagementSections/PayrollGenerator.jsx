@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import createAlertData from "../../../../../../hooks/CreateAlertData.mjs";
 import { useLocation } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import { Form, Button } from "react-bootstrap";
-import { FaCheckCircle } from "react-icons/fa";
 import CurrencyInput from "react-currency-input-field";
 import { generatePayrollPdf } from "../../../../../../services/api/employeeFiles/EmployeeFilesApi.mjs";
 import {
@@ -17,12 +17,8 @@ function PayrollGenerator() {
   const userData = location.state;
 
   //Atributes of the modal alert
-  const [title, setTitle] = useState("");
-  const [titleColor, setTitleColor] = useState("");
-  const [icon, setIcon] = useState();
-  const [bodyText, setBodyText] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [showAlertModal, setShowAlertModal] = useState(false); //Activate modal alert
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   // States to manage permissions and user data
   const [requiredPermissions, setRequiredPermissions] = useState([]); //Permissions
@@ -121,19 +117,25 @@ function PayrollGenerator() {
     };
 
     const data = { userId, permissions };
-
+    let alertData;
     try {
       //Generate the PDF and receive it as Blob
       const response = await generatePayrollPdf(payrollData, token, data, {
         responseType: "blob", //To receive binary data
       });
 
-      //Show the confirmation to the client
-      setTitle("");
-      setTitleColor("text-dark");
-      setIcon(<FaCheckCircle className="text-success fs-1" />);
-      setBodyText("El PDF se ha generado correctamente.");
-      setButtonText("Aceptar");
+      //Server response
+      alertData = response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      setAlertData(
+        createAlertData(
+          requestType === "show"
+            ? `Extracto de nomina de ${userData.last_names} ${userData.user_names}  generado correctamente.`
+            : `Se ha guardado correctamente el extracto de nomina de ${userData.last_names} ${userData.user_names}`,
+          200
+        )
+      ); //Save server response on the alert
 
       // 🔹 Create a Blob from the PDF file received in the response
       const blob = new Blob([response.data], { type: "application/pdf" });
@@ -175,12 +177,11 @@ function PayrollGenerator() {
       // 🔹 Clean up the temporary URL to free memory
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      // Manejo de errores
-      setTitle("¡Error!");
-      setTitleColor("text-danger");
-      setIcon(<FaCheckCircle className="text-danger fs-1" />);
-      setBodyText(error.response?.data?.message || "Error desconocido.");
-      setButtonText("Aceptar");
+      //Server response
+      alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
       Sentry.captureException(error); // Capture the error in Sentry
     } finally {
       setShowAlertModal(true);
@@ -613,11 +614,11 @@ function PayrollGenerator() {
       <AlertModal
         show={showAlertModal}
         onClose={() => setShowAlertModal(false)}
-        title={title}
-        titleColor={titleColor}
-        icon={icon}
-        bodyText={bodyText}
-        buttonText={buttonText}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
       />
     </div>
   );
