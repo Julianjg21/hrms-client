@@ -185,16 +185,18 @@ function SearchUsers() {
                       id="exampleSelect"
                       className="form-control text-center"
                       onChange={(e) => {
-                        handleSeachEmployees(e.target.value); // Llamar a la función
+                        handleSeachEmployees(e.target.value); //Call the function
                       }}
+                      defaultValue="" //Predetermined value
                     >
-                      <option value="Seguridad">Área de Seguridad</option>
-                      <option value="Administrador">Área Administrativa</option>
-                      <option value="Limpieza">Área de Limpieza</option>
-                      <option value="Atencion">
+                      <option value="" disabled>Selecciona una opción</option>
+                      <option value="seguridad">Área de Seguridad</option>
+                      <option value="administrador">Área Administrativa</option>
+                      <option value="limpieza">Área de Limpieza</option>
+                      <option value="atencion">
                         Área de Atención al Cliente
                       </option>
-                      <option value="Entretenimiento">
+                      <option value="entretenimiento">
                         Área de Entretenimiento
                       </option>
                     </Form.Select>
