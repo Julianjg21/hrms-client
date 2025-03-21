@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import createAlertData from "../../../../../../hooks/CreateAlertData.mjs";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../../../../../../common/modals/AlertModal";
-import DeleteUserModal from "../../../../../../common/modals/deleteUser/DeleteUserModal";
+import DeleteUserModal from "../../../../../../common/modals/deleteUser/DeleteUserModal.jsx";
 import { Form, Card, Button, CardTitle } from "react-bootstrap";
 import ProtectedElements from "../../../../../../hooks/ProtectedElements.mjs";
 import * as Sentry from "@sentry/react";
