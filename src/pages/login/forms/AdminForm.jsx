@@ -27,6 +27,7 @@ function AdminForm() {
       );
       localStorage.setItem("AdminUserId", response.data.userId);  //Save the user id in localStorage
       localStorage.setItem("AdminEmail", response.data.email); //Save the user email in localStorage
+      localStorage.setItem("UserNames", response.data.user_names); //Save the user names in localStorage
 
       //Navigate to the AdminPortal path
       navigate("/AdminPortal");
