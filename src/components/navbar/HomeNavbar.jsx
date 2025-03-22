@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -10,6 +10,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 function HomeNavbar() {
   const navigate = useNavigate(); //Direct to another route
   const location = useLocation(); //Get the current route
+  const [user_names, setUserNames] = useState();
+  //Get the name of the logged in user
+  useEffect(() => {
+    setUserNames(localStorage.getItem("UserNames"));
+  }, []);
 
   //log out the user
   const logOut = () => {
@@ -41,11 +46,11 @@ function HomeNavbar() {
 
         <Dropdown>
           <Dropdown.Toggle variant="dark" className="custom-dropdown-toggle">
-            Julian Jimenez
+            {user_names}
             <FontAwesomeIcon icon={faChevronDown} className="text-light ms-2" />
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
+          <Dropdown.Menu align="end">
             <Dropdown.Item onClick={logOut} className="">
               <FontAwesomeIcon
                 icon={faArrowLeft}
