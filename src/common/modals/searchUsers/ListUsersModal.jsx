@@ -22,7 +22,7 @@ function ListUsersModal({
     >
       <Modal.Header className="border border-bottom-0" closeButton>
         <Modal.Title className="fs-6 w-100 text-center">
-          ¡Usuario Encontrado!
+          ¡Usuarios Encontrados!
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="border border-bottom-0 border-top-0 ">
