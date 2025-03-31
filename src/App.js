@@ -23,6 +23,7 @@ import EmployeeFiles from "./pages/home/adminHome/AdminModules/employeeDocuments
 import MainPayrollManagement from "./pages/home/adminHome/AdminModules/payrollManagement/MainPayrollManagement";
 import PayrollGenerator from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/PayrollGenerator";
 import DownloadPayrollExtract from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/DownloadPayrollExtract";
+import MainAdminCalendar from "./pages/home/adminHome/AdminModules/adminCalendar/MainAdminCalendar";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
@@ -80,6 +81,7 @@ function App() {
               />
               <Route path="payrollGenerator" element={<PayrollGenerator />} />
             </Route>
+            <Route path="Calendar" element={<MainAdminCalendar />} />
           </Route>
           {/* Employee portal route, only accessible for employees */}
           <Route path="/EmployeePortal" element={<EmployeePortalPage />} />
