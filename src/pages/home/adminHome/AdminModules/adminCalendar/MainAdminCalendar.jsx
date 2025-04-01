@@ -3,7 +3,7 @@ import CalendarBoard from "../../../../../components/calendar/CalendarBoard";
 
 function MainAdminCalendar() {
   return (
-    <div className="admin-calendar">
+    <div className="container">
       <CalendarBoard />
     </div>
   );
