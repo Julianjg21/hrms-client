@@ -1,6 +1,6 @@
 import React from "react";
 import HomeNavbar from "../../../components/navbar/HomeNavbar";
-import MainMenu from "../../../components/Menu/MainMenu";
+import MainMenu from "../../../components/menu/MainMenu";
 import EmployeeMenuButtons from "./employeeMenuButtons/EmployeeMenuButtons";
 function EmployeePortalPage() {
   return (
