@@ -14,16 +14,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import CreateUser from "./pages/home/adminHome/AdminModules/userManagement/userManagementSections/CreateUser";
-import MainUserManagement from "./pages/home/adminHome/AdminModules/userManagement/MainUserManagement";
-import EditUser from "./pages/home/adminHome/AdminModules/userManagement/userManagementSections/EditeUser";
+import CreateUser from "./pages/home/adminHome/adminModules/userManagement/userManagementSections/CreateUser";
+import MainUserManagement from "./pages/home/adminHome/adminModules/userManagement/MainUserManagement";
+import EditUser from "./pages/home/adminHome/adminModules/userManagement/userManagementSections/EditeUser";
 import SearchUsers from "./components/users/SearchUsers";
-import MainEmployeeDocumentation from "./pages/home/adminHome/AdminModules/employeeDocuments/MainEmployeeDocumentation";
-import EmployeeFiles from "./pages/home/adminHome/AdminModules/employeeDocuments/employeeDocumentationSections/EmployeeFiles";
-import MainPayrollManagement from "./pages/home/adminHome/AdminModules/payrollManagement/MainPayrollManagement";
-import PayrollGenerator from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/PayrollGenerator";
-import DownloadPayrollExtract from "./pages/home/adminHome/AdminModules/payrollManagement/payrollManagementSections/DownloadPayrollExtract";
-import MainAdminCalendar from "./pages/home/adminHome/AdminModules/adminCalendar/MainAdminCalendar";
+import MainEmployeeDocumentation from "./pages/home/adminHome/adminModules/employeeDocuments/MainEmployeeDocumentation";
+import EmployeeFiles from "./pages/home/adminHome/adminModules/employeeDocuments/employeeDocumentationSections/EmployeeFiles";
+import MainPayrollManagement from "./pages/home/adminHome/adminModules/payrollManagement/MainPayrollManagement";
+import PayrollGenerator from "./pages/home/adminHome/adminModules/payrollManagement/payrollManagementSections/PayrollGenerator";
+import DownloadPayrollExtract from "./pages/home/adminHome/adminModules/payrollManagement/payrollManagementSections/DownloadPayrollExtract";
+import MainAdminCalendar from "./pages/home/adminHome/adminModules/adminCalendar/MainAdminCalendar";
 function App() {
   //get all permissions from the server and store them in local storage
   useEffect(() => {
