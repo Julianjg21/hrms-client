@@ -21,7 +21,7 @@ function MainMenu({ MenuButtons }) {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid bg-light">
       <div className="row">
         <div
           className={`col-12 col-md-2 p-0 ${
@@ -55,7 +55,7 @@ function MainMenu({ MenuButtons }) {
             isCollapsed ? "col-md-10" : "col-md-12"
           }`}
         >
-          <div className="border border-1 border-warning  border-opacity-50 mt-2 p-0 container">
+          <div className="border border-1 border-warning  border-opacity-50 mt-2 p-0 container bg-light">
             <Outlet />
             {/* Render image only when Outlet is empty */}
             {isHomeRootRoute && (

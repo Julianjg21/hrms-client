@@ -64,14 +64,14 @@ function AdminMenuButtons() {
   ];
 
   return (
-    <div className="btn-group-vertical p-0">
+    <div className="btn-group-vertical p-0 ">
       {buttons.map(({ label, icon, path }) => (
         <Button
           key={path}
           title="Seleccionar sección"
           variant="outline-dark"
           className={`border-warning rounded-0 text-start ${
-            activeButton.includes(path) ? "bg-dark text-light" : ""
+            activeButton.includes(path) ? " btn btn-dark text-light" : ""
           }`}
           onClick={() => navigate(path)}
         >
