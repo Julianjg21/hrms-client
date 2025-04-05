@@ -2,7 +2,10 @@ import React, { useState, useMemo } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import Table from "react-bootstrap/Table";
+import NewEventModal from "../../common/modals/events/NewEventModal";
 function CalendarBoard() {
+  const [showModal, setShowModal] = useState(false); //State to control the visibility of the modal
+  const handleClose = () => setShowModal(false); //Function to close the modal
   //Status to track the displacement of the month
   const [monthOffset, setMonthOffset] = useState(0);
 
@@ -61,6 +64,7 @@ function CalendarBoard() {
               <button
                 className="float-end btn  btn-dark "
                 title="Agregar evento"
+                onClick={() => setShowModal(true)}
               >
                 <CiCirclePlus size="30px" />
               </button>
@@ -129,6 +133,8 @@ function CalendarBoard() {
         </div>
         <div className="col-0 col-md-2"></div>
       </div>
+
+      <NewEventModal show={showModal} onClose={handleClose} />
     </div>
   );
 }
