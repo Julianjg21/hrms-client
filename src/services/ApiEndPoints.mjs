@@ -31,4 +31,9 @@ export const API_ROUTES = {
   generatePayrollPdf: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/generatePayrollPdf`,
   getUserPayrollExtracts: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/getUserPayrollExtracts`,
   downloadUserPayrollExtracts: `${process.env.REACT_APP_API_BASE_URL}/requestUserDocuments/downloadUserPayrollExtracts`,
+  //get,create, update and eliminate user events
+  createNewEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/newEvent`,
+  updateEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/updateEvent`,
+  getAllEvents: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/getAllEvents`,
+  deleteEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/deleteEvent`,
 };
