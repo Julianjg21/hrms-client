@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Modal, Form, Button } from "react-bootstrap";
 import * as Sentry from "@sentry/react";
-import {  getAllEvents, deleteEvent, updateEvent, createNewEvent } from "../../../services/api/userEvents/UserEventsApis.mjs";
+import { createNewEvent } from "../../../services/api/userEvents/UserEventsApis.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -13,13 +13,12 @@ import AlertModal from "../AlertModal";
 function NewEventModal({
   show, //Check if the modal is visible
   onClose, //Function to close the modal) {
+  updateEvents,
 }) {
   //State for user permissions and authentication
   const [userId, setUserId] = useState(); //Admin user ID
   const [token, setToken] = useState(); //Admin authentication token
   const [permissions, setPermissions] = useState([]); // Extracted permissions
-
-
 
   //Atributes of the modal alert
   const [alertData, setAlertData] = useState({});
@@ -36,7 +35,6 @@ function NewEventModal({
   const [endDate, setEndDate] = useState();
   const [endHour, setEndHour] = useState();
   const [description, setDescription] = useState();
-  const [events, setEvents] = useState();
 
   const location = useLocation(); //To redirect to another route
 
@@ -62,31 +60,7 @@ function NewEventModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-    //Get all events of the user
-  const handleGetAllEvents = async () => {
-
-    let alertData;
-
-    try {
-      const response = await getAllEvents( token, permissions, userId);
-      setEvents(response.data);
-      alertData = response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-    } catch (error) {
-      //Server response
-      alertData = error.response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-      Sentry.captureException(error); // Capture the error in Sentry
-    } finally {
-      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-
-      setShowAlertModal(true);
-    }
-  }
-
-// Create event
+  // Create event
   const handleCreateEvent = async (e) => {
     e.preventDefault(); // Prevent default form submission
     const eventData = {
@@ -115,64 +89,9 @@ function NewEventModal({
       setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
 
       setShowAlertModal(true);
+      updateEvents(); // Update events after creating a new event
     }
   };
-
-// Delete event
-  const handleDeleteEvent = async (eventId) => {
-    let alertData;
-
-    try {
-      const response = await deleteEvent(eventId, token, permissions, userId);
-
-      alertData = response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-    } catch (error) {
-      //Server response
-      alertData = error.response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-      Sentry.captureException(error); // Capture the error in Sentry
-    } finally {
-      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-
-      setShowAlertModal(true);
-    }
-  }
-
-  // Update event
-  const handleUpdateEvent = async (eventId) => {
-    const eventData = {
-      title,
-      ubication,
-      startDate: `${startDate} ${startHour}:00`,
-      endDate: `${endDate} ${endHour}:00`,
-      description,
-      eventId
-    };
-    let alertData;
-
-    try {
-      const response = await updateEvent(eventData, token, permissions, userId);
-
-      alertData = response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-    } catch (error) {
-      //Server response
-      alertData = error.response || {
-        data: { message: "Error desconocido.", status: 500 },
-      };
-      Sentry.captureException(error); // Capture the error in Sentry
-    } finally {
-      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-
-      setShowAlertModal(true);
-    }
-  }
-
-
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -185,8 +104,10 @@ function NewEventModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="border border-bottom-0 border-top-0 bg-light border-dark">
-        <ProtectedElements requiredPermission={requiredPermissions.management_events}>
-          <Form onSubmit={handleCreateEvent}>
+        <ProtectedElements
+          requiredPermission={requiredPermissions.management_events}
+        >
+          <Form>
             <Form.Group>
               <Form.Control
                 onChange={(e) => setTitle(e.target.value)}
@@ -259,7 +180,9 @@ function NewEventModal({
         </ProtectedElements>
       </Modal.Body>
       <Modal.Footer className="border border-top-0 d-flex justify-content-center bg-light border-dark">
-        <Button variant="primary">Agregar Evento</Button>
+        <Button variant="primary" type="button" onClick={handleCreateEvent}>
+          Agregar Evento
+        </Button>
       </Modal.Footer>
       <AlertModal
         show={showAlertModal}
