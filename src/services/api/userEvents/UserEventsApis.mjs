@@ -23,7 +23,7 @@ export const createNewEvent = async (eventData, token, permissions) => {
 //update event
 export const updateEvent = async (eventData, token, permissions, userId) => {
   try {
-    const response = await axios.post(API_ROUTES.updateEvent, eventData, {
+    const response = await axios.put(API_ROUTES.updateEvent, eventData, {
       headers: {
         Authorization: `Barear ${token}`,
         "Content-Type": "application/json",
@@ -41,8 +41,8 @@ export const updateEvent = async (eventData, token, permissions, userId) => {
 //delete event
 export const deleteEvent = async (eventId, token, permissions, userId) => {
   try {
-    const response = await axios.post(
-      `${API_ROUTES.deleteEvent}/eventId=${eventId}`,
+    const response = await axios.delete(
+      `${API_ROUTES.deleteEvent}/${eventId}`,
       {
         headers: {
           Authorization: `Barear ${token}`,
@@ -62,8 +62,8 @@ export const deleteEvent = async (eventId, token, permissions, userId) => {
 // Get all events of the user
 export const getAllEvents = async (token, permissions, userId) => {
   try {
-    const response = await axios.post(
-      `${API_ROUTES.getAllEvents}/userId=${userId}`,
+    const response = await axios.get(
+      `${API_ROUTES.getAllEvents}/${userId}`,
       {
         headers: {
           Authorization: `Barear ${token}`,
