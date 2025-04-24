@@ -9,7 +9,7 @@ import {
   selectPermissions,
   extractUsedPermissions,
 } from "../../utils/utils.mjs";
-import NewEventModal from "../../common/modals/events/NewEventModal";
+import NewEventModal from "../../common/modals/events/CreateOrUpdateEventModal";
 import * as Sentry from "@sentry/react";
 import ProtectedElements from "../../hooks/ProtectedElements.mjs";
 import { getAllEvents } from "../../services/api/userEvents/UserEventsApis.mjs";
