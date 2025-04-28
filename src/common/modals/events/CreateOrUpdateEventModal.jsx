@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Modal, Form, Button } from "react-bootstrap";
 import * as Sentry from "@sentry/react";
-import { createNewEvent, updateEvent} from "../../../services/api/userEvents/UserEventsApis.mjs";
+import {
+  createNewEvent,
+  updateEvent,
+} from "../../../services/api/userEvents/UserEventsApis.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
@@ -14,7 +17,7 @@ function CreateOrUpdateEventModal({
   show, //Check if the modal is visible
   onClose, //Function to close the modal) {
   updateEvents,
-  updateEventData
+  eventDetails,
 }) {
   //State for user permissions and authentication
   const [userId, setUserId] = useState(); //Admin user ID
@@ -27,15 +30,26 @@ function CreateOrUpdateEventModal({
 
   // State for user permissions and authentication
   const [requiredPermissions, setRequiredPermissions] = useState([""]);
+  useEffect(() => {
+    if (eventDetails) {
+      setTitle(eventDetails.title || "");
+      setUbication(eventDetails.ubication || "");
+      setStartDate(eventDetails.startDate || "");
+      setStartHour(eventDetails.startHour || "");
+      setEndDate(eventDetails.endDate || "");
+      setEndHour(eventDetails.endHour || "");
+      setDescription(eventDetails.description || "");
+    }
+  }, [eventDetails]);
 
   //event data
-  const [title, setTitle] = useState(updateEventData?.title || "");
-  const [ubication, setUbication] = useState(updateEventData?.ubication || "");
+  const [title, setTitle] = useState();
+  const [ubication, setUbication] = useState();
   const [startDate, setStartDate] = useState();
   const [startHour, setStartHour] = useState();
   const [endDate, setEndDate] = useState();
   const [endHour, setEndHour] = useState();
-  const [description, setDescription] = useState(updateEventData?.description || "");
+  const [description, setDescription] = useState();
 
   const location = useLocation(); //To redirect to another route
 
@@ -60,6 +74,7 @@ function CreateOrUpdateEventModal({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Create event
   const handleCreateEvent = async () => {
@@ -101,8 +116,8 @@ function CreateOrUpdateEventModal({
       startDate: `${startDate} ${startHour}:00`,
       endDate: `${endDate} ${endHour}:00`,
       description,
-      eventId: updateEventData.id_event
-    }
+      eventId: eventDetails.id_event,
+    };
     let alertData;
 
     try {
@@ -215,8 +230,12 @@ function CreateOrUpdateEventModal({
         </ProtectedElements>
       </Modal.Body>
       <Modal.Footer className="border border-top-0 d-flex justify-content-center bg-light border-dark">
-        <Button variant="primary" type="button" onClick={`${updateEventData ? handleCreateEvent : handleUpdateEvent  }`}>
-          {`${updateEventData ? "Actualizar Evento" : " Agregar Evento"}` }
+        <Button
+          variant="primary"
+          type="button"
+          onClick={`${eventDetails ? handleCreateEvent : handleUpdateEvent}`}
+        >
+          {`${eventDetails ? "Actualizar Evento" : " Agregar Evento"}`}
         </Button>
       </Modal.Footer>
       <AlertModal
