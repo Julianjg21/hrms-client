@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import CreateOrUpdateEventModal from "./CreateOrUpdateEventModal";
 function ShowEventDetails({ eventDetails, onClose, show }) {
-  
+
   const [showEditModal, setShowEditModal] = React.useState(false);
   const closeEditModal = () => setShowEditModal(false);
 
@@ -10,6 +10,28 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
     setShowEditModal(true);
     onClose();
   };
+
+  //Format the start and end date to YYYY-MM-DD and HH:MM
+  let startDate = "";
+  let startHour = "";
+  let endDate = "";
+  let endHour = "";
+
+  if (eventDetails?.start_date) {
+    const start_Date = new Date(eventDetails.start_date);
+    const end_Date = new Date(eventDetails.end_date);
+
+    if (!isNaN(start_Date)) {
+      const isoStr = start_Date.toISOString();
+      startDate = isoStr.split("T")[0];
+      startHour = isoStr.split("T")[1].substring(0, 5);
+    }
+    if (!isNaN(end_Date)) {
+      const isoStr = end_Date.toISOString();
+      endDate = isoStr.split("T")[0];
+      endHour = isoStr.split("T")[1].substring(0, 5);
+    }
+  }
 
   return (
     <div>
@@ -49,7 +71,7 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
                   <p className="text-secondary fw-bolder">Inicio:</p>
                 </div>
                 <div className="col-6">
-                  <p>{eventDetails.start_date}</p>
+                  <p>{startDate} Hora: { startHour}</p>
                 </div>
               </div>
               <div className="row">
@@ -57,7 +79,7 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
                   Finalizacíon:
                 </div>
                 <div className="col-6">
-                  <p>{eventDetails.end_date}</p>
+                  <p>{endDate} Hora: { endHour}</p>
                 </div>
               </div>
             </div>
@@ -74,6 +96,7 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
         show={showEditModal}
         onClose={closeEditModal}
         eventDetails={eventDetails}
+        dates={{ startHour, startDate, endHour, endDate }}
       />
     </div>
   );
