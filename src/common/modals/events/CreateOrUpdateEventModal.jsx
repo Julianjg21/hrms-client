@@ -18,6 +18,7 @@ function CreateOrUpdateEventModal({
   onClose, //Function to close the modal) {
   updateEvents,
   eventDetails,
+  dates
 }) {
   //State for user permissions and authentication
   const [userId, setUserId] = useState(); //Admin user ID
@@ -34,13 +35,13 @@ function CreateOrUpdateEventModal({
     if (eventDetails) {
       setTitle(eventDetails.title || "");
       setUbication(eventDetails.ubication || "");
-      setStartDate(eventDetails.startDate || "");
-      setStartHour(eventDetails.startHour || "");
-      setEndDate(eventDetails.endDate || "");
-      setEndHour(eventDetails.endHour || "");
+      setStartDate(dates.startDate || "");
+      setStartHour(dates.startHour || "");
+      setEndDate(dates.endDate || "");
+      setEndHour(dates.endHour|| "");
       setDescription(eventDetails.description || "");
     }
-  }, [eventDetails]);
+  }, [eventDetails, dates]);
 
   //event data
   const [title, setTitle] = useState();
@@ -182,6 +183,7 @@ function CreateOrUpdateEventModal({
                 <div className="col-4">
                   <Form.Control
                     onChange={(e) => setStartDate(e.target.value)}
+                    value={startDate}
                     type="date"
                     placeholder="Fecha"
                   />
@@ -189,6 +191,7 @@ function CreateOrUpdateEventModal({
                 <div className="col-4">
                   <Form.Control
                     onChange={(e) => setStartHour(e.target.value)}
+                    value={startHour}
                     type="time"
                     placeholder="Fecha"
                   />
@@ -203,6 +206,7 @@ function CreateOrUpdateEventModal({
                 <div className="col-4">
                   <Form.Control
                     onChange={(e) => setEndDate(e.target.value)}
+                    value={endDate}
                     type="date"
                     placeholder="Fecha"
                   />
@@ -210,6 +214,7 @@ function CreateOrUpdateEventModal({
                 <div className="col-4">
                   <Form.Control
                     onChange={(e) => setEndHour(e.target.value)}
+                    value={endHour}
                     type="time"
                     placeholder="Fecha"
                   />
