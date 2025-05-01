@@ -14,8 +14,6 @@ import * as Sentry from "@sentry/react";
 import ProtectedElements from "../../hooks/ProtectedElements.mjs";
 import { getAllEvents } from "../../services/api/userEvents/UserEventsApis.mjs";
 function CalendarBoard() {
-
-
   //Show event information states and function
   const [event, setEvent] = useState(""); //Event information
   const [showEventDetailsModal, setShowEventDetailsModal] = useState(false); //Show  modal
@@ -24,7 +22,6 @@ function CalendarBoard() {
   //Show and close the new event modal state and function
   const [showNewEventModal, setShowNewEventModal] = useState(false); //State to control the visibility of the new event modal
   const CloseNewEventModal = () => setShowNewEventModal(false); //Function to close the  New event modal
-
 
   //Status to track the displacement of the month
   const [monthOffset, setMonthOffset] = useState(0);
@@ -272,6 +269,7 @@ function CalendarBoard() {
         eventDetails={event}
         show={showEventDetailsModal}
         onClose={CloseEventDetailsModal}
+        updateEvents={updateEvents}
       />
       <NewEventModal
         show={showNewEventModal}
