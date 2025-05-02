@@ -1,10 +1,12 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import CreateOrUpdateEventModal from "./CreateOrUpdateEventModal";
-function ShowEventDetails({ eventDetails, onClose, show }) {
-
+function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
-  const closeEditModal = () => setShowEditModal(false);
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    updateEvents();
+  };
 
   const handleShowEditModal = () => {
     setShowEditModal(true);
@@ -71,7 +73,9 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
                   <p className="text-secondary fw-bolder">Inicio:</p>
                 </div>
                 <div className="col-6">
-                  <p>{startDate} Hora: { startHour}</p>
+                  <p>
+                    {startDate} Hora: {startHour}
+                  </p>
                 </div>
               </div>
               <div className="row">
@@ -79,7 +83,9 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
                   Finalizacíon:
                 </div>
                 <div className="col-6">
-                  <p>{endDate} Hora: { endHour}</p>
+                  <p>
+                    {endDate} Hora: {endHour}
+                  </p>
                 </div>
               </div>
             </div>
@@ -96,6 +102,7 @@ function ShowEventDetails({ eventDetails, onClose, show }) {
         show={showEditModal}
         onClose={closeEditModal}
         eventDetails={eventDetails}
+        updateEvents={updateEvents}
         dates={{ startHour, startDate, endHour, endDate }}
       />
     </div>
