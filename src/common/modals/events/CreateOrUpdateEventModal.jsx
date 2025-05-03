@@ -135,9 +135,7 @@ function CreateOrUpdateEventModal({
       Sentry.captureException(error); // Capture the error in Sentry
     } finally {
       setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-
       setShowAlertModal(true);
-      updateEvents(); // Update events after creating a new event
     }
   };
 
@@ -238,7 +236,7 @@ function CreateOrUpdateEventModal({
         <Button
           variant="primary"
           type="button"
-          onClick={`${eventDetails ? handleCreateEvent : handleUpdateEvent}`}
+          onClick={eventDetails ? handleUpdateEvent  : handleCreateEvent}
         >
           {`${eventDetails ? "Actualizar Evento" : " Agregar Evento"}`}
         </Button>
