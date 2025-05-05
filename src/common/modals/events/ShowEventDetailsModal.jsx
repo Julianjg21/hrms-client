@@ -1,7 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
+import AlertModal from "../AlertModal";
+import * as Sentry from "@sentry/react";
+import createAlertData from "../../../hooks/CreateAlertData.mjs";
+import { deleteEvent } from "../../../services/api/userEvents/UserEventsApis.mjs";
 import CreateOrUpdateEventModal from "./CreateOrUpdateEventModal";
+import {
+  selectPermissions,
+  extractUsedPermissions,
+} from "../../../utils/utils.mjs";
 function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
+  //State for user permissions and authentication
+  const [userId, setUserId] = useState(); //Admin user ID
+  const [token, setToken] = useState(); //Admin authentication token
+  const [permissions, setPermissions] = useState([]); // Extracted permissions
+
+  // State for user permissions and authentication
+  const [requiredPermissions, setRequiredPermissions] = useState([""]);
+  //Atributes of the modal alert
+  const [alertData, setAlertData] = useState({});
+  const [showAlertModal, setShowAlertModal] = useState(false);
+
+  const location = useLocation(); //To redirect to another route
+
+  useEffect(() => {
+    // Get required permissions
+    const getPermissions = selectPermissions(["management_events"]);
+
+    setRequiredPermissions(getPermissions);
+
+    // Extract used permissions
+    const extractedPermissions = extractUsedPermissions(getPermissions);
+    setPermissions(extractedPermissions);
+
+    if (location.pathname.startsWith("/AdminPortal")) {
+      // Get user ID and token from localStorage
+      setUserId(localStorage.getItem("AdminUserId"));
+      setToken(localStorage.getItem("AdminToken"));
+    } else if (location.pathname.startsWith("/EmployeePortal")) {
+      // Get user ID and token from localStorage
+      setUserId(localStorage.getItem("EmployeeUserId"));
+      setToken(localStorage.getItem("EmployeeToken"));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [showEditModal, setShowEditModal] = React.useState(false);
   const closeEditModal = () => {
     setShowEditModal(false);
@@ -35,6 +79,33 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
     }
   }
 
+  const handleDeleteEvent = async () => {
+    let alertData;
+    try {
+      const response = await deleteEvent(
+        eventDetails.id_event,
+        token,
+        permissions,
+        userId
+      );
+
+      alertData = response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+    } catch (error) {
+      //Server response
+      alertData = error.response || {
+        data: { message: "Error desconocido.", status: 500 },
+      };
+      Sentry.captureException(error); // Capture the error in Sentry
+    } finally {
+      setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
+
+      setShowAlertModal(true);
+      updateEvents(); // Update events after creating a new event
+    }
+  };
+
   return (
     <div>
       <Modal show={show} onHide={onClose} centered>
@@ -54,7 +125,6 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
                 <p className="text-secondary fw-bolder ">Lugar o link:</p>
               </div>
               <div className="col-6">
-                {" "}
                 <p className="">{eventDetails.ubication}</p>
               </div>
             </div>
@@ -95,7 +165,9 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
           <Button className="btn btn-secondary " onClick={handleShowEditModal}>
             Editar{" "}
           </Button>
-          <Button className="btn btn-danger">Eliminar</Button>
+          <Button className="btn btn-danger" onClick={handleDeleteEvent}>
+            Eliminar
+          </Button>
         </Modal.Footer>
       </Modal>
       <CreateOrUpdateEventModal
@@ -104,6 +176,15 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
         eventDetails={eventDetails}
         updateEvents={updateEvents}
         dates={{ startHour, startDate, endHour, endDate }}
+      />
+      <AlertModal
+        show={showAlertModal}
+        onClose={() => setShowAlertModal(false)}
+        title={alertData.title}
+        titleColor={alertData.titleColor}
+        icon={alertData.icon}
+        bodyText={alertData.bodyText}
+        buttonText={alertData.buttonText}
       />
     </div>
   );
