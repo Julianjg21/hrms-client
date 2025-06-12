@@ -60,10 +60,11 @@ export const deleteEvent = async (eventId, token, permissions, userId) => {
 };
 
 // Get all events of the user
-export const getAllEvents = async (token, permissions, userId) => {
+export const getAllEventsByDate = async (token, permissions, userId, dateToFindEvents) => {
+  const date = dateToFindEvents;
   try {
     const response = await axios.get(
-      `${API_ROUTES.getAllEvents}/${userId}`,
+      `${API_ROUTES.getAllEventsByDate}/${date}`,
       {
         headers: {
           Authorization: `Barear ${token}`,

@@ -34,6 +34,6 @@ export const API_ROUTES = {
   //get,create, update and eliminate user events
   createNewEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/newEvent`,
   updateEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/updateEvent`,
-  getAllEvents: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/getAllEvents`,
+  getAllEventsByDate: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/getAllEventsByDate`,
   deleteEvent: `${process.env.REACT_APP_API_BASE_URL}/requestUserEvents/deleteEvent`,
 };
