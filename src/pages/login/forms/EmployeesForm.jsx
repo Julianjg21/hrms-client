@@ -73,9 +73,10 @@ function EmployeesForm() {
             type="submit"
             className="border border-1 d-block mx-auto"
             style={{ maxWidth: "300px" }}
-            title="Iniciar sesión"
+            title="Sección deshabilitada"
+            disabled="true"
           >
-            Ingresar
+            Ingresar🔐
           </Button>
           <Button
             variant="light"
