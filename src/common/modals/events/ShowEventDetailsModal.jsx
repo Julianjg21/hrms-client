@@ -16,8 +16,6 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
   const [token, setToken] = useState(); //Admin authentication token
   const [permissions, setPermissions] = useState([]); // Extracted permissions
 
-  // State for user permissions and authentication
-  const [requiredPermissions, setRequiredPermissions] = useState([""]);
   //Atributes of the modal alert
   const [alertData, setAlertData] = useState({});
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -27,8 +25,6 @@ function ShowEventDetails({ eventDetails, onClose, show, updateEvents }) {
   useEffect(() => {
     // Get required permissions
     const getPermissions = selectPermissions(["management_events"]);
-
-    setRequiredPermissions(getPermissions);
 
     // Extract used permissions
     const extractedPermissions = extractUsedPermissions(getPermissions);
