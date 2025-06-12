@@ -12,17 +12,14 @@ import { IoIosNavigate } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function AdminMenuButtons() {
-  // State to keep track of the active button based on the current route
   const [activeButton, setActiveButton] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Update active button based on the current route
   useEffect(() => {
     setActiveButton(location.pathname);
   }, [location]);
 
-  // Button configuration for dynamic rendering
   const buttons = [
     {
       label: "Control de Usuarios",
@@ -50,30 +47,33 @@ function AdminMenuButtons() {
       path: "calendar",
     },
     {
-      label: "Horario/Turnos",
+      label: "Horario/Turnos🔐",
       icon: (
         <FontAwesomeIcon icon={faCalendarDays} className="text-secondary" />
       ),
       path: "schedule",
+      disabled: true,
     },
     {
-      label: "Solicitudes de Usuarios",
+      label: "Solicitudes Usuarios🔐",
       icon: <IoIosNavigate className="text-secondary me-1" />,
       path: "userRequests",
+      disabled: true,
     },
   ];
 
   return (
-    <div className="btn-group-vertical p-0 ">
-      {buttons.map(({ label, icon, path }) => (
+    <div className="btn-group-vertical p-0">
+      {buttons.map(({ label, icon, path, disabled }) => (
         <Button
           key={path}
-          title="Seleccionar sección"
+          title={disabled ? "Sección deshabilitada" : "Seleccionar sección"}
           variant="outline-dark"
           className={`border-warning rounded-0 text-start ${
-            activeButton.includes(path) ? " btn btn-dark text-light" : ""
-          }`}
-          onClick={() => navigate(path)}
+            activeButton.includes(path) ? "btn btn-dark text-light" : ""
+          } ${disabled ? "opacity-50 text-muted" : ""}`}
+          onClick={() => !disabled && navigate(path)}
+          disabled={disabled}
         >
           {icon} {label}
         </Button>
