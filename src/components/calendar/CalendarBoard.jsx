@@ -56,7 +56,7 @@ function CalendarBoard() {
   const [requiredPermissions, setRequiredPermissions] = useState([""]);
 
   // Alert message handling
-  const [alertData, setAlertData] = useState({});
+  const [alertData] = useState({});
   const [showAlertModal, setShowAlertModal] = useState(false);
 
   const location = useLocation();
