@@ -115,9 +115,11 @@ function CalendarBoard() {
     }
   }, [location.pathname]);
 
+
   // Reload events when user or selected day changes
   useEffect(() => {
     handleGetAllEventsByDate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, daySelected]);
 
   // Fetches events from backend based on selected date
