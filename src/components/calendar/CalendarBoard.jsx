@@ -1,291 +1,298 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { CiCirclePlus } from "react-icons/ci";
-import AlertModal from "../../common/modals/AlertModal";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
-import ShowEventDetails from "../../common/modals/events/ShowEventDetailsModal";
 import { useLocation } from "react-router-dom";
 import Table from "react-bootstrap/Table";
+import AlertModal from "../../common/modals/AlertModal";
+import ShowEventDetails from "../../common/modals/events/ShowEventDetailsModal";
+import NewEventModal from "../../common/modals/events/CreateOrUpdateEventModal";
+import ProtectedElements from "../../hooks/ProtectedElements.mjs";
 import {
   selectPermissions,
   extractUsedPermissions,
 } from "../../utils/utils.mjs";
-import NewEventModal from "../../common/modals/events/CreateOrUpdateEventModal";
 import * as Sentry from "@sentry/react";
-import ProtectedElements from "../../hooks/ProtectedElements.mjs";
-import { getAllEvents } from "../../services/api/userEvents/UserEventsApis.mjs";
+import { getAllEventsByDate } from "../../services/api/userEvents/UserEventsApis.mjs";
+// Mapping Spanish month names to JS month indices
+const MONTHS = {
+  enero: 0,
+  febrero: 1,
+  marzo: 2,
+  abril: 3,
+  mayo: 4,
+  junio: 5,
+  julio: 6,
+  agosto: 7,
+  septiembre: 8,
+  octubre: 9,
+  noviembre: 10,
+  diciembre: 11,
+};
+
 function CalendarBoard() {
-  //Show event information states and function
-  const [event, setEvent] = useState(""); //Event information
-  const [showEventDetailsModal, setShowEventDetailsModal] = useState(false); //Show  modal
-  const CloseEventDetailsModal = () => setShowEventDetailsModal(false); //Function to close the modal
+  // Modal and selected event management
+  const [event, setEvent] = useState("");
+  const [events, setEvents] = useState([]);
 
-  //Show and close the new event modal state and function
-  const [showNewEventModal, setShowNewEventModal] = useState(false); //State to control the visibility of the new event modal
-  const CloseNewEventModal = () => setShowNewEventModal(false); //Function to close the  New event modal
-
-  //Status to track the displacement of the month
+  // Selected day and month offset state
+  const [daySelected, setDaySelected] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
 
-  const [today, setToday] = useState(new Date().getDate()); //Current date
+  // Used to highlight today's date
+  const [today] = useState(new Date().getDate());
 
-  //State for user permissions and authentication
-  const [userId, setUserId] = useState(); // user ID
-  const [token, setToken] = useState(); // authentication token
-  const [permissions, setPermissions] = useState([]); // Extracted permissions
+  // Show and hide modal  that displays event details
+  const [showEventDetailsModal, setShowEventDetailsModal] = useState(false);
+  const [showNewEventModal, setShowNewEventModal] = useState(false);
 
-  // State for user permissions and authentication
+  // Modal close functions
+  const CloseEventDetailsModal = () => setShowEventDetailsModal(false);
+  const CloseNewEventModal = () => setShowNewEventModal(false);
+
+  // Auth and permission-related state
+  const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
+  const [permissions, setPermissions] = useState([]);
   const [requiredPermissions, setRequiredPermissions] = useState([""]);
 
-  //Atributes of the modal alert
+  // Alert message handling
   const [alertData, setAlertData] = useState({});
   const [showAlertModal, setShowAlertModal] = useState(false);
 
-  const location = useLocation(); //To redirect to another route
+  const location = useLocation();
 
-  useEffect(() => {
-    // Get required permissions
-    const getPermissions = selectPermissions(["management_events"]);
-
-    setRequiredPermissions(getPermissions);
-
-    // Extract used permissions
-    const extractedPermissions = extractUsedPermissions(getPermissions);
-    setPermissions(extractedPermissions);
-
-    if (location.pathname.startsWith("/AdminPortal")) {
-      // Get user ID and token from localStorage
-      setUserId(localStorage.getItem("AdminUserId"));
-      setToken(localStorage.getItem("AdminToken"));
-    } else if (location.pathname.startsWith("/EmployeePortal")) {
-      // Get user ID and token from localStorage
-      setUserId(localStorage.getItem("EmployeeUserId"));
-      setToken(localStorage.getItem("EmployeeToken"));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  //State to store the events of the user
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    if (userId) {
-      handleGetAllEvents(); // Get all events of the user
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
-
-  const updateEvents = (newEvent) => {
-    handleGetAllEvents(); // Get all events of the user
-  };
-  //Get all events of the user
-  const handleGetAllEvents = async () => {
-    /*     let alertData; */
-
-    try {
-      const response = await getAllEvents(token, permissions, userId);
-      setEvents(response.data.data);
-      console.log(response);
-      /*   alertData = response || {
-        data: { message: "Error desconocido.", status: 500 },
-      }; */
-    } catch (error) {
-      //Server response
-      /*   alertData = error.response || {
-        data: { message: "Error desconocido.", status: 500 },
-      }; */
-      Sentry.captureException(error); // Capture the error in Sentry
-    } finally {
-      /*   setAlertData(createAlertData(alertData.data.message, alertData.status)); //Save server response on the alert
-
-      setShowAlertModal(true); */
-    }
-  };
-
+  // Calendar calculation: current month, weeks and days matrix
   const date = useMemo(() => {
-    const fecha = new Date();
-    const todayMonth = new Date(); //Current month
-    fecha.setMonth(fecha.getMonth() + monthOffset);
+    const now = new Date();
+    now.setMonth(now.getMonth() + monthOffset);
 
-    //Obtain key data of the month
-    const year = fecha.getFullYear();
-    const month = fecha.getMonth();
-    const firstDay = new Date(year, month, 1).getDay(); //Day of the week of the 1st day of the month
-
-    //Adjustment for Monday to be the first day (0) and Sunday (6)
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
     const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
-
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    //Generate the 35 -day array for the calendar
     const daysArray = Array(35).fill(null);
-    let dayCounter = 1;
-
-    for (let i = adjustedFirstDay; i < daysArray.length; i++) {
-      if (dayCounter <= daysInMonth) {
-        daysArray[i] = dayCounter++;
-      }
+    for (let i = adjustedFirstDay, d = 1; d <= daysInMonth; i++, d++) {
+      daysArray[i] = d;
     }
-    //Group in ranks of 7
+
     const weeks = [];
     for (let i = 0; i < daysArray.length; i += 7) {
       weeks.push(daysArray.slice(i, i + 7));
     }
 
     return {
+      year,
       month: new Intl.DateTimeFormat("es-CO", {
         timeZone: "America/Bogota",
         month: "long",
-      }).format(fecha),
-      year,
-      weeks,
+      }).format(now),
       todayMonth: new Intl.DateTimeFormat("es-CO", {
         timeZone: "America/Bogota",
         month: "long",
-      }).format(todayMonth),
+      }).format(new Date()),
+       todayDay: new Date().toLocaleString("es-CO", {
+    timeZone: "America/Bogota",
+    day: "2-digit",
+  }),
+      weeks,
     };
   }, [monthOffset]);
 
-  const getTodayEvents = (day) => {
-    setToday(day); //Set the current day
-  };
+  // Load permissions and authentication info on component mount
+  useEffect(() => {
+    const selected = selectPermissions(["management_events"]);
+    setRequiredPermissions(selected);
+    setPermissions(extractUsedPermissions(selected));
 
-  const showEventInformation = (event) => {
-    setShowEventDetailsModal(true);
-    setEvent(event);
-  };
+    if (location.pathname.startsWith("/AdminPortal")) {
+      setUserId(localStorage.getItem("AdminUserId"));
+      setToken(localStorage.getItem("AdminToken"));
+    } else if (location.pathname.startsWith("/EmployeePortal")) {
+      setUserId(localStorage.getItem("EmployeeUserId"));
+      setToken(localStorage.getItem("EmployeeToken"));
+    }
+  }, [location.pathname]);
 
-  return (
-    <div className="container  mt-2">
-      <h1 className=" text-center fs-2 mt-2 mb-4">Calendario</h1>
-      <p className="text-center ">
-        • Gestiona aquí tus eventos del día a día para una mejor organización de
-        tu tiempo.
-      </p>
+  // Reload events when user or selected day changes
+  useEffect(() => {
+    handleGetAllEventsByDate();
+  }, [userId, daySelected]);
 
-      <div className="row mt-2 mb-2 ">
-        <div className="col-0 col-md-2"></div>
-        <div className="col-12 col-md-8 ">
-          <div className="row">
-            <div className="col-12 bg-dark p-0 rounded-top-3">
-              <button
-                className="float-end btn  btn-dark "
-                title="Agregar evento"
-                onClick={() => setShowNewEventModal(true)}
-              >
-                <CiCirclePlus size="30px" />
-              </button>
-            </div>
-          </div>
-          <div className="row bg-secondary">
-            <div className="col-3 ">
-              <button
-                className="h-100 bg-secondary border-0 float-end "
-                onClick={() => setMonthOffset((prev) => prev - 1)}
-              >
-                <IoMdArrowDropleft className="text-light shadow" size="30px" />
-              </button>
-            </div>
-            <div className="col-6  bg-light rounded-5 mt-3 mb-3 shadow">
-              <p className="fw-bolder fs- text-center mt-3 text-uppercase ">
-                {date.month}:{date.year}
-              </p>
-            </div>
-            <div className="col-3">
-              <button
-                className="h-100  bg-secondary border-0 float-start"
-                onClick={() => setMonthOffset((prev) => prev + 1)}
-              >
-                <IoMdArrowDropright className="text-light shadow" size="30px" />
-              </button>
-            </div>
-          </div>
-          <ProtectedElements
-            requiredPermission={requiredPermissions.management_events}
-          >
+  // Fetches events from backend based on selected date
+  const handleGetAllEventsByDate = async () => {
+    const newDate =
+      daySelected === 0
+        ? new Date(date.year, MONTHS[date.month.toLowerCase()], date.todayDay)
+        : new Date(date.year, MONTHS[date.month.toLowerCase()], daySelected);
+    const dateToFind = newDate.toISOString().split("T")[0];
+
+    try {
+      const response = await getAllEventsByDate(
+        token,
+        permissions,
+        userId,
+        dateToFind
+      );
+      setEvents(response.data.data);
+    } catch (error) {
+      Sentry.captureException(error);
+
+    };
+  }
+
+    // Exposes event reload externally
+    const updateEvents = () => handleGetAllEventsByDate();
+
+    // Opens modal and sets selected event
+    const showEventInformation = (event) => {
+      setEvent(event);
+      setShowEventDetailsModal(true);
+    };
+
+
+    return (
+      <div className="container  mt-2">
+        <h1 className=" text-center fs-2 mt-2 mb-4">Calendario</h1>
+        <p className="text-center ">
+          • Gestiona aquí tus eventos del día a día para una mejor organización de
+          tu tiempo.
+        </p>
+
+        <div className="row mt-2 mb-2 ">
+          <div className="col-0 col-md-2"></div>
+          <div className="col-12 col-md-8 ">
             <div className="row">
-              <div className="col-12 p-0">
-                <Table
-                  striped
-                  hover
-                  className="table table-borderless w-100 h-100"
+              <div className="col-12 bg-dark p-0 rounded-top-3">
+                <button
+                  className="float-end btn  btn-dark "
+                  title="Agregar evento"
+                  onClick={() => setShowNewEventModal(true)}
                 >
-                  <thead>
-                    <tr className="table-secondary">
-                      {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(
-                        (day) => (
-                          <th key={day}>{day}</th>
-                        )
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {date.weeks.map((week, index) => (
-                      <tr key={index} className="table-secondary ">
-                        {week.map((day, i) => (
-                          <td
-                            className={
-                              day === today && date.month === date.todayMonth
-                                ? "table-light"
-                                : ""
-                            }
-                            onClick={() => getTodayEvents(day)}
-                            key={i}
-                          >
-                            {day || ""}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                  <CiCirclePlus size="30px" />
+                </button>
               </div>
             </div>
-          </ProtectedElements>
-          <div className="row">
-            <div className="col-12 bg-dark p-0 rounded-bottom-3">
-              <h2 className="text-light text-center fs-5 mt-1 mb-0">Eventos</h2>
-              {events ? (
-                <div className="p-3">
-                  {events.map((event) => (
-                    <button
-                      onClick={() => showEventInformation(event)}
-                      className="w-100 text-start btn btn-dark border-0 border-bottom  border-primary"
-                    >
-                      {event.title}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-light  text-center mt-5 mb-5">
-                  No hay eventos
+            <div className="row bg-secondary">
+              <div className="col-3 ">
+                <button
+                  className="h-100 bg-secondary border-0 float-end "
+                  onClick={() => setMonthOffset((prev) => prev - 1)}
+                >
+                  <IoMdArrowDropleft className="text-light shadow" size="30px" />
+                </button>
+              </div>
+              <div className="col-6  bg-light rounded-5 mt-3 mb-3 shadow">
+                <p className="fw-bolder fs- text-center mt-3 text-uppercase ">
+                  {date.month}:{date.year}
                 </p>
-              )}
+              </div>
+              <div className="col-3">
+                <button
+                  className="h-100  bg-secondary border-0 float-start"
+                  onClick={() => setMonthOffset((prev) => prev + 1)}
+                >
+                  <IoMdArrowDropright className="text-light shadow" size="30px" />
+                </button>
+              </div>
+            </div>
+            <ProtectedElements
+              requiredPermission={requiredPermissions.management_events}
+            >
+              <div className="row">
+                <div className="col-12 p-0">
+                  <Table
+                    striped
+                    hover
+                    className="table table-borderless w-100 h-100"
+                  >
+                    <thead>
+                      <tr className="table-secondary">
+                        {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(
+                          (day) => (
+                            <th key={day}>{day}</th>
+                          )
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {date.weeks.map((week, index) => (
+                        <tr key={index} className="table-secondary ">
+                          {week.map((day, i) => (
+                            <td
+                              className={
+                                day === today && date.month === date.todayMonth
+                                  ? "table-light"
+                                  : day === daySelected
+                                    ? "table-dark"
+                                    : ""
+                              }
+                              onClick={() => setDaySelected(day)}
+                              key={i}
+                            >
+                              {day || ""}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
+            </ProtectedElements>
+            <div className="row">
+              <div className="col-12 bg-dark p-0 rounded-bottom-3">
+                <h2 className="text-light text-center fs-5 mt-1 mb-0">Eventos</h2>
+
+                {Array.isArray(events) && events.length > 0 ? (
+                  <div className="px-3 pb-3 pt-2 d-flex flex-column gap-2">
+                    {events.map((event) => (
+                      <button
+                        key={event.id}
+                        onClick={() => showEventInformation(event)}
+                        className="btn btn-outline-light text-start w-100 d-flex align-items-center justify-content-between py-2 px-3 rounded-2 shadow-sm border border-0 bg-gradient"
+                        style={{ backgroundColor: "#2c2f36" }}
+                      >
+                        <span className="fw-medium">{event.title}</span>
+                        <span className="badge bg-primary bg-opacity-75">
+                          {event?.time || "📅"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-light text-center mt-3 mb-3">
+                    No hay eventos
+                  </p>
+                )}
+              </div>
             </div>
           </div>
+          <div className="col-0 col-md-2"></div>
         </div>
-        <div className="col-0 col-md-2"></div>
+        <ShowEventDetails
+          eventDetails={event}
+          show={showEventDetailsModal}
+          onClose={CloseEventDetailsModal}
+          updateEvents={updateEvents}
+        />
+        <NewEventModal
+          show={showNewEventModal}
+          onClose={CloseNewEventModal}
+          updateEvents={updateEvents}
+        />
+        <AlertModal
+          show={showAlertModal}
+          onClose={() => setShowAlertModal(false)}
+          title={alertData.title}
+          titleColor={alertData.titleColor}
+          icon={alertData.icon}
+          bodyText={alertData.bodyText}
+          buttonText={alertData.buttonText}
+        />
       </div>
-      <ShowEventDetails
-        eventDetails={event}
-        show={showEventDetailsModal}
-        onClose={CloseEventDetailsModal}
-        updateEvents={updateEvents}
-      />
-      <NewEventModal
-        show={showNewEventModal}
-        onClose={CloseNewEventModal}
-        updateEvents={updateEvents}
-      />
-      <AlertModal
-        show={showAlertModal}
-        onClose={() => setShowAlertModal(false)}
-        title={alertData.title}
-        titleColor={alertData.titleColor}
-        icon={alertData.icon}
-        bodyText={alertData.bodyText}
-        buttonText={alertData.buttonText}
-      />
-    </div>
-  );
-}
+    );
+  }
+
 export default CalendarBoard;
